@@ -4,15 +4,54 @@ publish_to: 'none'
 
 environment:
   sdk: ^3.8.1
+
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
 
+  # Clean Architecture essentials
+  get_it: ^7.6.7           # Dependency injection
+  injectable: ^2.4.1       # Code generation for DI
+  equatable: ^2.0.5        # Value equality for entities/value objects
+
+  # State management (choose one or more as needed)
+  flutter_bloc: ^8.1.4     # Bloc pattern
+
+  # Networking
+  dio: ^5.4.3              # HTTP client
+
+  # Data persistence
+  hive: ^2.2.3             # Lightweight DB
+  hive_flutter: ^1.1.0     # Hive for Flutter
+  shared_preferences: ^2.5.3
+
+  # JSON serialization
+  json_annotation: ^4.9.0
+
+  # Theme
+  json_theme: ^8.0.0+2
+
+  # Misc
+  flutter_dotenv: ^5.2.1
+
+  # Navigation
+  go_router: ^15.2.3
+  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+
+  # Code generation
+  build_runner: ^2.4.9
+  injectable_generator: ^2.6.1
+  json_serializable: ^6.8.0
+  hive_generator: ^2.0.1
+
+  # Logging
+  logger: ^2.5.0
 
 
 # The following section is specific to Flutter packages.
