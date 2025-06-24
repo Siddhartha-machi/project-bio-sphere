@@ -15,24 +15,25 @@ class CoreThemeBuilder {
 
   TextTheme _buildTextTheme(ColorScheme colorScheme) {
     return TextTheme(
+      /// Body text styles
       bodyLarge: TextStyle(
         color: colorScheme.onSurface,
         fontSize: 16.sp,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0.5,
         decoration: TextDecoration.none,
       ),
       bodyMedium: TextStyle(
         color: colorScheme.onSurface,
         fontSize: 14.sp,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0.25,
         decoration: TextDecoration.none,
       ),
       bodySmall: TextStyle(
         color: colorScheme.onSurface.withAlpha(200),
         fontSize: 12.sp,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0.4,
         decoration: TextDecoration.none,
       ),
@@ -81,21 +82,18 @@ class CoreThemeBuilder {
 
       /// Label styles
       labelLarge: TextStyle(
-        color: colorScheme.onPrimary,
         fontSize: 15.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.25,
         decoration: TextDecoration.none,
       ),
       labelMedium: TextStyle(
-        color: colorScheme.onPrimary,
         fontSize: 13.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.5,
         decoration: TextDecoration.none,
       ),
       labelSmall: TextStyle(
-        color: colorScheme.onPrimary,
         fontSize: 12.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.5,
@@ -106,22 +104,22 @@ class CoreThemeBuilder {
       titleLarge: TextStyle(
         fontSize: 18.sp,
         letterSpacing: 0.15,
-        color: colorScheme.primary,
         fontWeight: FontWeight.w800,
+        color: colorScheme.onSurface,
         decoration: TextDecoration.none,
       ),
       titleMedium: TextStyle(
-        color: colorScheme.primary,
         fontSize: 16.sp,
-        fontWeight: FontWeight.w800,
         letterSpacing: 0.15,
+        fontWeight: FontWeight.w800,
+        color: colorScheme.onSurface,
         decoration: TextDecoration.none,
       ),
       titleSmall: TextStyle(
-        color: colorScheme.primary,
         fontSize: 14.sp,
-        fontWeight: FontWeight.w800,
         letterSpacing: 0.1,
+        fontWeight: FontWeight.w800,
+        color: colorScheme.onSurface,
         decoration: TextDecoration.none,
       ),
     );
