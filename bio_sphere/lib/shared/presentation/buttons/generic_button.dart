@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
+import 'package:bio_sphere/shared/presentation/ui_feedback/loaders.dart';
 
 class GenericButton extends StatelessWidget {
   const GenericButton({
@@ -38,7 +39,7 @@ class GenericButton extends StatelessWidget {
     final theme = Theme.of(context);
     Color bgColor, txtColor;
 
-    if (onPressed == null || isLoading) {
+    if (onPressed == null) {
       bgColor = txtColor = theme.disabledColor;
     } else {
       switch (variant) {
@@ -78,42 +79,58 @@ class GenericButton extends StatelessWidget {
     );
   }
 
+  Widget _buildLoader(Color color) {
+    double size = 20;
+    if (height != null) {
+      size = height! - (height! / 2.3);
+    }
+
+    return SizedBox(height: size, width: size, child: Loaders.spinner(color));
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget button;
     final [bgColor, txtColor] = _buildColors(context);
+    final pressHandler = isLoading ? null : onPressed;
 
     if (type == ButtonType.filled) {
       button = FilledButton(
-        onPressed: onPressed,
+        onPressed: pressHandler,
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all(bgColor),
           shape: WidgetStateProperty.all(
             Theme.of(context).buttonTheme.shape as OutlinedBorder?,
           ),
         ),
-        child: _buildChild(context, txtColor),
+        child: isLoading
+            ? _buildLoader(txtColor)
+            : _buildChild(context, txtColor),
       );
     } else if (type == ButtonType.outlined) {
       button = OutlinedButton(
-        onPressed: onPressed,
+        onPressed: pressHandler,
         style: ButtonStyle(
           shape: WidgetStateProperty.all(
             Theme.of(context).buttonTheme.shape as OutlinedBorder?,
           ),
           side: WidgetStateProperty.all(BorderSide(color: bgColor)),
         ),
-        child: _buildChild(context, bgColor),
+        child: isLoading
+            ? _buildLoader(bgColor)
+            : _buildChild(context, bgColor),
       );
     } else {
       button = TextButton(
-        onPressed: onPressed,
+        onPressed: pressHandler,
         style: ButtonStyle(
           shape: WidgetStateProperty.all(
             Theme.of(context).buttonTheme.shape as OutlinedBorder?,
           ),
         ),
-        child: _buildChild(context, bgColor),
+        child: isLoading
+            ? _buildLoader(bgColor)
+            : _buildChild(context, bgColor),
       );
     }
     return SizedBox(height: height, child: button);
