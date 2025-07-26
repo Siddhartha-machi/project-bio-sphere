@@ -84,19 +84,19 @@ class CoreThemeBuilder {
       labelLarge: TextStyle(
         fontSize: 15.sp,
         fontWeight: FontWeight.w700,
-        letterSpacing: 1.25,
+        letterSpacing: 0,
         decoration: TextDecoration.none,
       ),
       labelMedium: TextStyle(
         fontSize: 13.sp,
         fontWeight: FontWeight.w700,
-        letterSpacing: 1.5,
+        letterSpacing: 0,
         decoration: TextDecoration.none,
       ),
       labelSmall: TextStyle(
         fontSize: 12.sp,
         fontWeight: FontWeight.w700,
-        letterSpacing: 1.5,
+        letterSpacing: 0,
         decoration: TextDecoration.none,
       ),
 

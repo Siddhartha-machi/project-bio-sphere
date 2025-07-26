@@ -1,6 +1,7 @@
 name: bio_sphere
 description: "Bio sphere app"
 publish_to: 'none'
+version: 1.0.0
 
 environment:
   sdk: ^3.8.1
