@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bio_sphere/core/managers/routes/path.dart';
+import 'package:bio_sphere/core/routing/path.dart';
 
 void main() {
   group('Path', () {

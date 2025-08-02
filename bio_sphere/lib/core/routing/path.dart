@@ -32,11 +32,8 @@ class Path {
   }
 
   /// Append query parameters (?key=value)
-  static String _appendQueryParams(
-    String path,
-    Map<String, dynamic> queryParams,
-  ) {
-    final filtered = queryParams.entries.where((e) => e.value != null).toList();
+  static String _appendQueryParams(String path, Map<String, dynamic> qParams) {
+    final filtered = qParams.entries.where((e) => e.value != null).toList();
 
     if (filtered.isEmpty) return path;
 
