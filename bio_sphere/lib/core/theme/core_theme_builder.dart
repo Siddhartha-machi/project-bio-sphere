@@ -125,17 +125,47 @@ class CoreThemeBuilder {
     );
   }
 
+  InputDecorationTheme _buildInputDecoration(
+    ColorScheme scheme,
+    TextTheme txtTheme,
+  ) {
+    const borderRadius = BorderRadius.zero;
+    return InputDecorationTheme(
+      filled: true,
+      errorStyle: txtTheme.labelSmall!.copyWith(color: scheme.error),
+      border: const OutlineInputBorder(borderRadius: borderRadius),
+
+      hintStyle: txtTheme.labelSmall?.copyWith(
+        color: scheme.onSurface.withAlpha(150),
+      ),
+
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: scheme.error, width: 1.5),
+        borderRadius: borderRadius,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey, width: 1),
+        borderRadius: borderRadius,
+      ),
+      isDense: true,
+      contentPadding: EdgeInsets.all(10.sp),
+    );
+  }
+
   ThemeData buildTheme() {
     final colorScheme = ColorScheme.fromSwatch(
-      errorColor: error,
       primarySwatch: primary,
+      errorColor: error,
       brightness: brightness,
     );
 
+    final txtTheme = _buildTextTheme(colorScheme);
+
     return ThemeData(
       useMaterial3: true,
+      textTheme: txtTheme,
       colorScheme: colorScheme,
-      textTheme: _buildTextTheme(colorScheme),
+      inputDecorationTheme: _buildInputDecoration(colorScheme, txtTheme),
     );
   }
 }
