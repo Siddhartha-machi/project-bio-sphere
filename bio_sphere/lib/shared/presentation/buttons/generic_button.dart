@@ -16,8 +16,10 @@ class GenericButton extends StatelessWidget {
     this.onPressed,
     this.prefixIcon,
     this.suffixIcon,
+    this.borderRadius,
     this.isLoading = false,
     this.fullwidth = false,
+    this.isCircular = false,
     this.type = ButtonType.filled,
     this.variant = ButtonVariant.primary,
   });
@@ -28,8 +30,10 @@ class GenericButton extends StatelessWidget {
   final double? height;
   final bool isLoading;
   final ButtonType type;
+  final bool isCircular;
   final Color? textColor;
   final double? iconSize;
+  final double? borderRadius;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
   final ButtonVariant variant;
@@ -88,6 +92,26 @@ class GenericButton extends StatelessWidget {
     return SizedBox(height: size, width: size, child: Loaders.spinner(color));
   }
 
+  ButtonStyle _buildButtonStyle({Color? bgColor}) {
+    ShapeBorder? border;
+
+    if (isCircular == true) {
+      border = const CircleBorder();
+    } else if (borderRadius != null) {
+      border = RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(borderRadius!),
+      );
+    } else {
+      // null means use default from theme
+      border = null;
+    }
+
+    return ButtonStyle(
+      backgroundColor: WidgetStateProperty.all(bgColor),
+      shape: WidgetStateProperty.all(border as OutlinedBorder?),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget button;
@@ -97,12 +121,7 @@ class GenericButton extends StatelessWidget {
     if (type == ButtonType.filled) {
       button = FilledButton(
         onPressed: pressHandler,
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(bgColor),
-          shape: WidgetStateProperty.all(
-            Theme.of(context).buttonTheme.shape as OutlinedBorder?,
-          ),
-        ),
+        style: _buildButtonStyle(bgColor: bgColor),
         child: isLoading
             ? _buildLoader(txtColor)
             : _buildChild(context, txtColor),
@@ -110,12 +129,7 @@ class GenericButton extends StatelessWidget {
     } else if (type == ButtonType.outlined) {
       button = OutlinedButton(
         onPressed: pressHandler,
-        style: ButtonStyle(
-          shape: WidgetStateProperty.all(
-            Theme.of(context).buttonTheme.shape as OutlinedBorder?,
-          ),
-          side: WidgetStateProperty.all(BorderSide(color: bgColor)),
-        ),
+        style: _buildButtonStyle(),
         child: isLoading
             ? _buildLoader(bgColor)
             : _buildChild(context, bgColor),
@@ -123,11 +137,7 @@ class GenericButton extends StatelessWidget {
     } else {
       button = TextButton(
         onPressed: pressHandler,
-        style: ButtonStyle(
-          shape: WidgetStateProperty.all(
-            Theme.of(context).buttonTheme.shape as OutlinedBorder?,
-          ),
-        ),
+        style: _buildButtonStyle(),
         child: isLoading
             ? _buildLoader(bgColor)
             : _buildChild(context, bgColor),

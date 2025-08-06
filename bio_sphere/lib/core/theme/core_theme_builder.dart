@@ -166,6 +166,25 @@ class CoreThemeBuilder {
       textTheme: txtTheme,
       colorScheme: colorScheme,
       inputDecorationTheme: _buildInputDecoration(colorScheme, txtTheme),
+
+      /// Button styles
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+        ),
+      ),
+
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+        ),
+      ),
+
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+        ),
+      ),
     );
   }
 }
