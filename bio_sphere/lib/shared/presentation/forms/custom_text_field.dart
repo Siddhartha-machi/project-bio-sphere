@@ -2,32 +2,32 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:bio_sphere/shared/presentation/forms/base_form_field.dart';
+import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
 
-class CustomTextField extends BaseFormField<String> {
-  const CustomTextField({super.key, required super.config});
+class CustomTextField extends StatefulWidget {
+  final GenericFieldController<String> controller;
+
+  const CustomTextField(this.controller, {super.key});
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
-class _CustomTextFieldState
-    extends BaseFormFieldState<String, CustomTextField> {
+class _CustomTextFieldState extends State<CustomTextField> {
   late final TextEditingController _textController;
+
+  GenericFieldConfig _config() => widget.controller.config;
 
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController();
 
-    Future.microtask(() {
-      final controller = getFieldController();
-      controller.addListener(() {
-        if (controller.data != _textController.text) {
-          _textController.text = controller.data ?? '';
-        }
-      });
+    widget.controller.addListener(() {
+      if (widget.controller.data != _textController.text) {
+        _textController.text = widget.controller.data ?? '';
+      }
     });
   }
 
@@ -38,31 +38,23 @@ class _CustomTextFieldState
   }
 
   @override
-  String? reset() => '';
+  Widget build(BuildContext ctx) {
+    final config = _config();
 
-  @override
-  String? validate(String? value) {
-    String? error;
-
-    /// TODO : Refactor
-
-    if (value == null || value.isEmpty) {
-      error = 'Field is required';
-    }
-
-    return error;
-  }
-
-  @override
-  Widget buildFieldUI(BuildContext ctx, GenericFieldState<String> state) {
     return TextField(
-      onChanged: didChange,
-      focusNode: focusNode,
+      maxLines: config.rows,
+      minLines: config.rows,
       controller: _textController,
-      maxLines: widget.config.rows,
-      minLines: widget.config.rows,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        // fillColor: Colors.green,
+        // filled: true,
+        hintText: config.hintText,
+        enabledBorder: InputBorder.none,
+      ),
       style: TextStyle(fontSize: 12.sp),
-      decoration: buildDecoration(state),
+      onChanged: widget.controller.didChange,
+      obscureText: config.type == GenericFieldType.password,
     );
   }
 }
