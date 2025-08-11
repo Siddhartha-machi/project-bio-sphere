@@ -26,6 +26,7 @@ dependencies:
   hive: ^2.2.3             # Lightweight DB
   hive_flutter: ^1.1.0     # Hive for Flutter
   shared_preferences: ^2.5.3
+  file_picker: ^10.2.4
 
   # JSON serialization
   json_annotation: ^4.9.0
@@ -33,13 +34,18 @@ dependencies:
   # Theme
   json_theme: ^8.0.0+2
 
+  # Icons
+  icons_plus: ^5.0.0
+
   # Misc
   flutter_dotenv: ^5.2.1
   flutter_screenutil: ^5.9.3
 
   # Navigation
   go_router: ^16.0.0
-  
+
+  # Formatters
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

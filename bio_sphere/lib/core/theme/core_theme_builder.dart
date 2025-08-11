@@ -32,49 +32,49 @@ class CoreThemeBuilder {
       ),
       bodySmall: TextStyle(
         color: colorScheme.onSurface.withAlpha(200),
-        fontSize: 12.sp,
+        fontSize: 11.sp,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.4,
         decoration: TextDecoration.none,
       ),
       displayLarge: TextStyle(
         color: colorScheme.onSurface,
-        fontSize: 96.sp,
+        fontSize: 60.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: -1.5,
         decoration: TextDecoration.none,
       ),
       displayMedium: TextStyle(
         color: colorScheme.onSurface,
-        fontSize: 60.sp,
+        fontSize: 50.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: -0.5,
         decoration: TextDecoration.none,
       ),
       displaySmall: TextStyle(
         color: colorScheme.onSurface,
-        fontSize: 48.sp,
+        fontSize: 40.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: 0,
         decoration: TextDecoration.none,
       ),
       headlineLarge: TextStyle(
         color: colorScheme.onSurface,
-        fontSize: 40.sp,
+        fontSize: 20.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.25,
         decoration: TextDecoration.none,
       ),
       headlineMedium: TextStyle(
         color: colorScheme.onSurface,
-        fontSize: 34.sp,
+        fontSize: 16.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: 0.25,
         decoration: TextDecoration.none,
       ),
       headlineSmall: TextStyle(
         color: colorScheme.onSurface,
-        fontSize: 24.sp,
+        fontSize: 14.sp,
         fontWeight: FontWeight.w700,
         letterSpacing: 0,
         decoration: TextDecoration.none,
@@ -95,7 +95,7 @@ class CoreThemeBuilder {
       ),
       labelSmall: TextStyle(
         fontSize: 12.sp,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0,
         decoration: TextDecoration.none,
       ),
@@ -148,7 +148,7 @@ class CoreThemeBuilder {
         borderRadius: borderRadius,
       ),
       isDense: true,
-      contentPadding: EdgeInsets.all(10.sp),
+      contentPadding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 5.sp),
     );
   }
 
@@ -166,6 +166,10 @@ class CoreThemeBuilder {
       textTheme: txtTheme,
       colorScheme: colorScheme,
       inputDecorationTheme: _buildInputDecoration(colorScheme, txtTheme),
+
+      /// Ripple styles
+      splashColor: colorScheme.primary.withAlpha(25),
+      highlightColor: colorScheme.primary.withAlpha(25),
 
       /// Button styles
       filledButtonTheme: FilledButtonThemeData(

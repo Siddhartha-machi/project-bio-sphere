@@ -33,6 +33,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+# App related ignores
+/lib/dev_untracked
+
 # Symbolication related
 app.*.symbols
 
