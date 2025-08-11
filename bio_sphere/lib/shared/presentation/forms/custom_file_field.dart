@@ -1,4 +1,3 @@
-import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:flutter/material.dart';
 
 import 'package:icons_plus/icons_plus.dart';
@@ -8,6 +7,7 @@ import 'package:bio_sphere/shared/utils/global.dart';
 import 'package:bio_sphere/services/file_service.dart';
 import 'package:bio_sphere/models/data/attachment.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
+import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:bio_sphere/shared/constants/widget/text_widget_enums.dart';
 import 'package:bio_sphere/shared/presentation/buttons/generic_button.dart';
 import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
@@ -19,38 +19,7 @@ class CustomFileField extends StatelessWidget {
   const CustomFileField(this.controller, {super.key});
 
   ///
-  List<Attachment> _data() =>
-      (controller.data ??
-      [
-        Attachment(
-          id: '123',
-          url: '',
-          name: 'New test.jpg',
-          size: 123,
-          uploadDate: DateTime.now(),
-        ),
-        Attachment(
-          id: '142',
-          url: '',
-          name: 'New test.pdf',
-          size: 3243,
-          uploadDate: DateTime.now(),
-        ),
-        Attachment(
-          id: '32423',
-          url: '',
-          name: 'New test.xls',
-          size: 123,
-          uploadDate: DateTime.now(),
-        ),
-        Attachment(
-          id: '123423442',
-          url: '',
-          name: 'New test.doc',
-          size: 3243,
-          uploadDate: DateTime.now(),
-        ),
-      ]);
+  List<Attachment> _data() => (controller.data ?? []);
 
   String _computeTotalFilesSize() {
     final sum = _data().fold(0.0, (prev, item) => prev + item.size);

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:bio_sphere/shared/presentation/forms/base_form_field.dart';
+import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 
 class GenericFieldState<T> {
   final T? data;
@@ -29,9 +29,9 @@ class GenericFieldState<T> {
 }
 
 class GenericFieldController<T> extends ValueNotifier<GenericFieldState<T>> {
-  final BaseFormFieldState stateRef;
+  final GenericFieldConfig config;
 
-  GenericFieldController(this.stateRef, {T? initialValue})
+  GenericFieldController(this.config, {T? initialValue})
     : super(GenericFieldState<T>(data: initialValue));
 
   T? get data => value.data;
@@ -45,14 +45,17 @@ class GenericFieldController<T> extends ValueNotifier<GenericFieldState<T>> {
   }
 
   void validate() {
-    final validateResult = stateRef.validate(data);
-    if (validateResult != value.error) {
-      value = value.copyWith(error: validateResult);
+    if (data == null) {
+      value = value.copyWith(error: 'Field is required.');
     }
+    // final validateResult = stateRef.validate(data);
+    // if (validateResult != value.error) {
+    //   value = value.copyWith(error: validateResult);
+    // }
   }
 
   void reset() {
-    final resetValue = stateRef.reset();
-    value = GenericFieldState<T>(data: resetValue);
+    // final resetValue = stateRef.reset();
+    // value = GenericFieldState<T>(data: resetValue);
   }
 }

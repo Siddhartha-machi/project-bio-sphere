@@ -12,6 +12,7 @@ import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
 
 class FieldWrap<T> extends StatefulWidget {
   final bool withFocus;
+  final bool withWrapper;
   final GenericFieldConfig config;
   final Widget Function(GenericFieldController<T>) builder;
 
@@ -20,6 +21,7 @@ class FieldWrap<T> extends StatefulWidget {
     required this.config,
     required this.builder,
     this.withFocus = false,
+    this.withWrapper = false,
   });
 
   @override
@@ -123,6 +125,45 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
     return controller;
   }
 
+  Widget _buildField(
+    BuildContext ctx,
+    GenericFieldController<T> controller,
+    GenericFieldState<T> state,
+  ) {
+    return Column(
+      spacing: 5,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _buildFieldLabel(
+                ctx,
+                state,
+                _focusNode?.hasFocus ?? false,
+              ),
+            ),
+            if (state.error != null) _buildErrorWidget(ctx, state),
+          ],
+        ),
+
+        widget.withWrapper
+            ? Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6.sp),
+                  border: _buildBorderFromState(
+                    ctx,
+                    state,
+                    _focusNode?.hasFocus ?? false,
+                  ),
+                ),
+                child: widget.builder(controller),
+              )
+            : widget.builder(controller),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = _mayGetController(context);
@@ -134,40 +175,14 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
     return ValueListenableBuilder<GenericFieldState<T>>(
       valueListenable: controller,
       builder: (ctx, state, _) {
-        return Focus(
-          focusNode: _focusNode,
-          onFocusChange: (hasFocus) => _focusHandler(hasFocus, controller),
-          child: Column(
-            spacing: 5,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildFieldLabel(
-                      ctx,
-                      state,
-                      _focusNode?.hasFocus ?? false,
-                    ),
-                  ),
-                  if (state.error != null) _buildErrorWidget(ctx, state),
-                ],
-              ),
-
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.sp),
-                  border: _buildBorderFromState(
-                    ctx,
-                    state,
-                    _focusNode?.hasFocus ?? false,
-                  ),
-                ),
-                child: widget.builder(controller),
-              ),
-            ],
-          ),
-        );
+        return widget.withFocus
+            ? Focus(
+                focusNode: _focusNode,
+                onFocusChange: (hasFocus) =>
+                    _focusHandler(hasFocus, controller),
+                child: _buildField(ctx, controller, state),
+              )
+            : _buildField(ctx, controller, state);
       },
     );
   }

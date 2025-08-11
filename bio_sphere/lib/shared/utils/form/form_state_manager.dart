@@ -1,19 +1,15 @@
-import 'package:bio_sphere/shared/presentation/forms/base_form_field.dart';
+import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
 
 class FormStateManager {
   final Map<String, GenericFieldController> _fields = {};
 
-  void register<T>(
-    String name,
-    BaseFormFieldState stateRef, {
-    T? initialValue,
-  }) {
-    if (_fields.containsKey(name)) {
-      throw Exception('Field with name $name is already registered.');
+  void register<T>(GenericFieldConfig config, {T? initialValue}) {
+    if (_fields.containsKey(config.name)) {
+      throw Exception('Field with name ${config.name} is already registered.');
     }
-    _fields[name] = GenericFieldController<T>(
-      stateRef,
+    _fields[config.name] = GenericFieldController<T>(
+      config,
       initialValue: initialValue,
     );
   }

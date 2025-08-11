@@ -51,7 +51,7 @@ class TextUI extends StatelessWidget {
     this.fontStyle,
     this.fontWeight,
     this.letterSpacing,
-    this.align = TextAlign.center,
+    this.align = TextAlign.start,
   });
 
   TextStyle? _getTextStyle(BuildContext context) {

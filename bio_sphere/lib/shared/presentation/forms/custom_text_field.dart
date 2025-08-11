@@ -47,9 +47,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       controller: _textController,
       decoration: InputDecoration(
         border: InputBorder.none,
-        // fillColor: Colors.green,
-        // filled: true,
         hintText: config.hintText,
+        fillColor: Colors.transparent,
         enabledBorder: InputBorder.none,
       ),
       style: TextStyle(fontSize: 12.sp),

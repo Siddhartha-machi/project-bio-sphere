@@ -13,6 +13,8 @@ class CoreThemeBuilder {
     this.error = Colors.redAccent,
   });
 
+  static _borderRadius() => 3.sp;
+
   TextTheme _buildTextTheme(ColorScheme colorScheme) {
     return TextTheme(
       /// Body text styles
@@ -129,11 +131,11 @@ class CoreThemeBuilder {
     ColorScheme scheme,
     TextTheme txtTheme,
   ) {
-    const borderRadius = BorderRadius.zero;
+    final borderRadius = BorderRadius.circular(_borderRadius());
     return InputDecorationTheme(
       filled: true,
       errorStyle: txtTheme.labelSmall!.copyWith(color: scheme.error),
-      border: const OutlineInputBorder(borderRadius: borderRadius),
+      border: OutlineInputBorder(borderRadius: borderRadius),
 
       hintStyle: txtTheme.labelSmall?.copyWith(
         color: scheme.onSurface.withAlpha(150),
@@ -153,6 +155,8 @@ class CoreThemeBuilder {
   }
 
   ThemeData buildTheme() {
+    final borderRadius = _borderRadius();
+
     final colorScheme = ColorScheme.fromSwatch(
       primarySwatch: primary,
       errorColor: error,
@@ -174,19 +178,25 @@ class CoreThemeBuilder {
       /// Button styles
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
         ),
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
         ),
       ),
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
         ),
       ),
     );
