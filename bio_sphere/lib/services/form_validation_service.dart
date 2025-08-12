@@ -60,6 +60,9 @@ class FormValidationService {
     if (field.minLength != null) {
       validators.add(FormBuilderValidators.minLength(field.minLength!));
     }
+    if (field.maxLength != null) {
+      validators.add(FormBuilderValidators.maxLength(field.maxLength!));
+    }
     return _requiredValidator<String>(field, validators);
   }
 
@@ -90,7 +93,7 @@ class FormValidationService {
   /// -------------- Boolean Validators -------------- ///
 
   static Validator<bool> checkFieldValidator(GenericFieldConfig field) {
-    final validators = <Validator<bool>>[];
+    final validators = <Validator<bool>>[FormBuilderValidators.isTrue()];
     return _requiredValidator<bool>(
       field,
       validators,
