@@ -22,7 +22,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController();
+    _textController = TextEditingController(text: widget.controller.data);
 
     widget.controller.addListener(() {
       if (widget.controller.data != _textController.text) {

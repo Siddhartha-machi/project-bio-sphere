@@ -3,26 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:bio_sphere/shared/utils/global.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
+import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/constants/widget/text_widget_enums.dart';
 import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
 
 class CustomRadioboxField extends StatelessWidget {
-  final GenericFieldController<int> controller;
+  final GenericFieldController<GenericFieldOption> controller;
 
   const CustomRadioboxField(this.controller, {super.key});
 
-  Widget _buildRadioButton(BuildContext ctx, int index) {
-    final isActive = controller.data == index;
+  Widget _buildRadioButton(BuildContext ctx, GenericFieldOption option) {
+    final isActive = controller.data == option;
     final color = isActive
         ? Theme.of(ctx).primaryColor
         : Theme.of(ctx).colorScheme.onPrimary;
 
     return GestureDetector(
-      onTap: () => controller.didChange(index),
+      onTap: () => controller.didChange(option),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.0.sp, vertical: 2.sp),
-        padding: EdgeInsets.symmetric(horizontal: 8.0.sp, vertical: 4.sp),
+        margin: EdgeInsets.symmetric(horizontal: 8.0.sp),
+        padding: EdgeInsets.symmetric(horizontal: 8.0.sp, vertical: 8.sp),
         decoration: BoxDecoration(
           border: Border.all(color: color),
           borderRadius: BorderRadius.circular(3.sp),
@@ -36,15 +38,16 @@ class CustomRadioboxField extends StatelessWidget {
               spacing: 3.0.sp,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextUI('Label', level: TextLevel.bodySmall),
-                TextUI('Description', level: TextLevel.caption),
+                TextUI(option.label, level: TextLevel.bodySmall),
+                if (!Global.isEmptyString(option.description))
+                  TextUI(option.description!, level: TextLevel.caption),
               ],
             ),
             isActive
                 ? Icon(
-                    FontAwesome.circle_check_solid,
                     size: 15.sp,
                     color: color,
+                    FontAwesome.circle_check_solid,
                   )
                 : Icon(FontAwesome.circle, size: 15.sp),
           ],
@@ -55,8 +58,16 @@ class CustomRadioboxField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final options = controller.config.options;
+
+    assert(options != null && options.length > 1);
+    if (options == null) return TextUI('No options provided');
+
     return Column(
-      children: [for (int i = 0; i < 3; i++) _buildRadioButton(context, i)],
+      children: List.generate(
+        options.length,
+        (index) => _buildRadioButton(context, options[index]),
+      ),
     );
   }
 }

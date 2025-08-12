@@ -20,6 +20,7 @@ import 'package:bio_sphere/shared/presentation/forms/custom_date_time_field.dart
 class FormProvider extends StatefulWidget {
   final bool useGrouping;
   final double colSpacing;
+  final Map<String, dynamic> initialValues;
   final List<GenericFieldConfig> configList;
 
   const FormProvider({
@@ -27,6 +28,7 @@ class FormProvider extends StatefulWidget {
     this.colSpacing = 12.0,
     required this.configList,
     this.useGrouping = false,
+    this.initialValues = const {},
   });
 
   @override
@@ -49,7 +51,8 @@ class FormProviderState extends State<FormProvider> {
     _map = {};
 
     for (final config in widget.configList) {
-      _map[config.name] = _registerAndBuildFieldByType(config);
+      final initialValue = widget.initialValues[config.name];
+      _map[config.name] = _registerAndBuildFieldByType(config, initialValue);
     }
   }
 
@@ -61,14 +64,17 @@ class FormProviderState extends State<FormProvider> {
 
   /// ----------- State Utility ---------------- ///
 
-  FormFieldDefinition _registerAndBuildFieldByType(GenericFieldConfig config) {
+  FormFieldDefinition _registerAndBuildFieldByType(
+    GenericFieldConfig config,
+    dynamic initialValue,
+  ) {
     switch (config.type) {
       case GenericFieldType.text:
       case GenericFieldType.email:
       case GenericFieldType.double:
       case GenericFieldType.integer:
       case GenericFieldType.password:
-        formManager.register<String>(config);
+        formManager.register<String>(config, initialValue: initialValue);
         return FormFieldDefinition(
           builder: (fieldConfig) => FieldWrap<String>(
             withFocus: true,
@@ -80,7 +86,7 @@ class FormProviderState extends State<FormProvider> {
       case GenericFieldType.date:
       case GenericFieldType.time:
       case GenericFieldType.dateTime:
-        formManager.register<DateTime>(config);
+        formManager.register<DateTime>(config, initialValue: initialValue);
         return FormFieldDefinition(
           builder: (fieldConfig) => FieldWrap<DateTime>(
             withWrapper: true,
@@ -89,7 +95,7 @@ class FormProviderState extends State<FormProvider> {
           ),
         );
       case GenericFieldType.checkbox:
-        formManager.register<bool>(config);
+        formManager.register<bool>(config, initialValue: initialValue);
         return FormFieldDefinition(
           builder: (fieldConfig) => FieldWrap<bool>(
             config: fieldConfig,
@@ -98,7 +104,10 @@ class FormProviderState extends State<FormProvider> {
         );
       case GenericFieldType.dropdown:
       case GenericFieldType.select:
-        formManager.register<GenericFieldOption>(config);
+        formManager.register<GenericFieldOption>(
+          config,
+          initialValue: initialValue,
+        );
         return FormFieldDefinition(
           builder: (fieldConfig) => FieldWrap<GenericFieldOption>(
             withWrapper: true,
@@ -107,15 +116,18 @@ class FormProviderState extends State<FormProvider> {
           ),
         );
       case GenericFieldType.radio:
-        formManager.register<int>(config);
+        formManager.register<GenericFieldOption>(
+          config,
+          initialValue: initialValue,
+        );
         return FormFieldDefinition(
-          builder: (fieldConfig) => FieldWrap<int>(
+          builder: (fieldConfig) => FieldWrap<GenericFieldOption>(
             config: fieldConfig,
             builder: (controller) => CustomRadioboxField(controller),
           ),
         );
       case GenericFieldType.rating:
-        formManager.register<int>(config);
+        formManager.register<int>(config, initialValue: initialValue);
         return FormFieldDefinition(
           builder: (fieldConfig) => FieldWrap<int>(
             config: fieldConfig,
@@ -123,7 +135,10 @@ class FormProviderState extends State<FormProvider> {
           ),
         );
       case GenericFieldType.file:
-        formManager.register<List<Attachment>>(config);
+        formManager.register<List<Attachment>>(
+          config,
+          initialValue: initialValue,
+        );
         return FormFieldDefinition(
           builder: (fieldConfig) => FieldWrap<List<Attachment>>(
             config: fieldConfig,

@@ -80,12 +80,14 @@ class GenericFieldOption {
   const GenericFieldOption({
     this.helperText,
     this.iconConfig,
+    this.description,
     required this.value,
-    required this.optionLabel,
+    required this.label,
   });
 
   final String value;
+  final String label;
   final int? iconConfig;
-  final String optionLabel;
   final String? helperText;
+  final String? description;
 }

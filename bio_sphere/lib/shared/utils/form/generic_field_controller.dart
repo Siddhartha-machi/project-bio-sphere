@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import 'package:bio_sphere/services/form_validation_service.dart';
 import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 
 class GenericFieldState<T> {
@@ -30,8 +31,8 @@ class GenericFieldState<T> {
 
 class GenericFieldController<T> extends ValueNotifier<GenericFieldState<T>> {
   final GenericFieldConfig config;
-
-  GenericFieldController(this.config, {T? initialValue})
+  final T? initialValue;
+  GenericFieldController(this.config, {this.initialValue})
     : super(GenericFieldState<T>(data: initialValue));
 
   T? get data => value.data;
@@ -45,17 +46,59 @@ class GenericFieldController<T> extends ValueNotifier<GenericFieldState<T>> {
   }
 
   void validate() {
-    if (data == null) {
-      value = value.copyWith(error: 'Field is required.');
+    String? validateResult;
+    switch (config.type) {
+      case GenericFieldType.text:
+      case GenericFieldType.password:
+        final validator = FormValidationService.stringValidator(config);
+        validateResult = validator(data as String?);
+      case GenericFieldType.email:
+        final validator = FormValidationService.emailValidator(config);
+        validateResult = validator(data as String?);
+      case GenericFieldType.integer:
+        final validator = FormValidationService.intValidator(config);
+        validateResult = validator(data as String?);
+      case GenericFieldType.double:
+        final validator = FormValidationService.numValidator(config);
+        validateResult = validator(data as String?);
+
+      /// Date and time validations
+      case GenericFieldType.dateTime:
+        final validator = FormValidationService.dateTimeValidator(config);
+        validateResult = validator(data as DateTime?);
+        break;
+      case GenericFieldType.date:
+        final validator = FormValidationService.dateFieldValidator(config);
+        validateResult = validator(data as DateTime?);
+        break;
+      case GenericFieldType.time:
+        final validator = FormValidationService.timeFieldValidator(config);
+        validateResult = validator(data as DateTime?);
+        break;
+      case GenericFieldType.select:
+      case GenericFieldType.dropdown:
+        final validator = FormValidationService.dropdownFieldValidator(config);
+        validateResult = validator(data as GenericFieldOption?);
+        break;
+      case GenericFieldType.checkbox:
+        final validator = FormValidationService.checkFieldValidator(config);
+        validateResult = validator(data as bool?);
+        break;
+      case GenericFieldType.radio:
+        final validator = FormValidationService.radioFieldValidator(config);
+        validateResult = validator(data as GenericFieldOption?);
+        break;
+
+      default:
+        validateResult = null;
     }
-    // final validateResult = stateRef.validate(data);
-    // if (validateResult != value.error) {
-    //   value = value.copyWith(error: validateResult);
-    // }
+
+    if (validateResult != value.error) {
+      value = value.copyWith(error: validateResult);
+    }
   }
 
   void reset() {
-    // final resetValue = stateRef.reset();
-    // value = GenericFieldState<T>(data: resetValue);
+    value = GenericFieldState<T>(data: initialValue);
   }
 }

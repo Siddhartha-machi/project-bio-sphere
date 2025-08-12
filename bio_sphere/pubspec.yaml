@@ -46,6 +46,7 @@ dependencies:
 
   # Formatters
   intl: ^0.20.2
+  form_builder_validators: ^11.2.0
 
 dev_dependencies:
   flutter_test:

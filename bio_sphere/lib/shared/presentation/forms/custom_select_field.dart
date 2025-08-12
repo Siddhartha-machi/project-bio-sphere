@@ -24,7 +24,7 @@ class CustomSelectField extends StatelessWidget {
     if (state.data != null) {
       return state.data!;
     }
-    return GenericFieldOption(optionLabel: 'No option selected', value: 'null');
+    return GenericFieldOption(label: 'No option selected', value: 'null');
   }
 
   Widget _buildSelectedOption(GenericFieldOption option) {
@@ -38,7 +38,7 @@ class CustomSelectField extends StatelessWidget {
           ),
         Expanded(
           child: TextUI(
-            option.optionLabel,
+            option.label,
             align: TextAlign.start,
             level: TextLevel.bodySmall,
           ),
@@ -69,11 +69,7 @@ class CustomSelectField extends StatelessWidget {
               ),
             ),
           Expanded(
-            child: TextUI(
-              option.optionLabel,
-              color: color,
-              align: TextAlign.start,
-            ),
+            child: TextUI(option.label, color: color, align: TextAlign.start),
           ),
         ],
       ),
@@ -101,7 +97,7 @@ class CustomSelectField extends StatelessWidget {
             ),
     );
 
-    if (result != controller.data) {
+    if (result != null && result != controller.data) {
       controller.didChange(result);
     }
   }
