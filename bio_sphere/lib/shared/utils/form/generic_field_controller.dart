@@ -30,14 +30,25 @@ class GenericFieldState<T> {
 }
 
 class GenericFieldController<T> extends ValueNotifier<GenericFieldState<T>> {
-  final GenericFieldConfig config;
   final T? initialValue;
+  final GenericFieldConfig config;
+
   GenericFieldController(this.config, {this.initialValue})
     : super(GenericFieldState<T>(data: initialValue));
 
   T? get data => value.data;
   String? get error => value.error;
-  bool get isTouched => value.touched;
+
+  bool isValid() {
+    /// If the field is required, then it should have a value and no error.
+    if (config.isRequired) {
+      return value.error == null && value.data != null;
+    }
+
+    return value.error == null;
+  }
+
+  bool isDirty() => value.touched && initialValue != data;
 
   void didChange(T? newValue) {
     if (value.data != newValue) {
@@ -45,8 +56,10 @@ class GenericFieldController<T> extends ValueNotifier<GenericFieldState<T>> {
     }
   }
 
-  void validate() {
+  /// Returns true if field is valid
+  bool validate() {
     String? validateResult;
+
     switch (config.type) {
       case GenericFieldType.text:
       case GenericFieldType.password:
@@ -96,6 +109,8 @@ class GenericFieldController<T> extends ValueNotifier<GenericFieldState<T>> {
     if (validateResult != value.error) {
       value = value.copyWith(error: validateResult);
     }
+
+    return validateResult == null;
   }
 
   void reset() {

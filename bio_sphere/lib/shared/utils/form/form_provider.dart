@@ -2,44 +2,39 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:bio_sphere/models/data/attachment.dart';
-import 'package:bio_sphere/shared/utils/form/field_wrap.dart';
 import 'package:bio_sphere/shared/utils/form/form_scope.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
 import 'package:bio_sphere/shared/utils/form/form_state_manager.dart';
 import 'package:bio_sphere/shared/utils/form/form_field_definition.dart';
 import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
-import 'package:bio_sphere/shared/presentation/forms/custom_file_field.dart';
-import 'package:bio_sphere/shared/presentation/forms/custom_text_field.dart';
-import 'package:bio_sphere/shared/presentation/forms/custom_select_field.dart';
-import 'package:bio_sphere/shared/presentation/forms/custom_rating_field.dart';
-import 'package:bio_sphere/shared/presentation/forms/custom_checkbox_field.dart';
-import 'package:bio_sphere/shared/presentation/forms/custom_radiobox_field.dart';
-import 'package:bio_sphere/shared/presentation/forms/custom_date_time_field.dart';
+import 'package:bio_sphere/shared/constants/widget/text_widget_enums.dart';
+import 'package:bio_sphere/shared/utils/form/form_registration_manager.dart';
 
 class FormProvider extends StatefulWidget {
   final bool useGrouping;
   final double colSpacing;
+  final FormStateManager formManager;
   final Map<String, dynamic> initialValues;
   final List<GenericFieldConfig> configList;
 
   const FormProvider({
     super.key,
-    this.colSpacing = 12.0,
+    this.colSpacing = 16.0,
     required this.configList,
     this.useGrouping = false,
+    required this.formManager,
     this.initialValues = const {},
   });
 
   @override
-  State<FormProvider> createState() => FormProviderState();
+  State<FormProvider> createState() => _FormProviderState();
 
   static FormStateManager of(BuildContext context) => FormScope.of(context);
 }
 
-class FormProviderState extends State<FormProvider> {
+class _FormProviderState extends State<FormProvider> {
   late final FormStateManager formManager;
-  late final Map<String, FormFieldDefinition> _map;
+  late final Map<String, FormFieldDefinition> _definitions;
 
   static const String _defaultKey = '##---##';
 
@@ -47,105 +42,21 @@ class FormProviderState extends State<FormProvider> {
   @override
   void initState() {
     super.initState();
-    formManager = FormStateManager();
-    _map = {};
+    formManager = widget.formManager;
 
-    for (final config in widget.configList) {
-      final initialValue = widget.initialValues[config.name];
-      _map[config.name] = _registerAndBuildFieldByType(config, initialValue);
+    /// Create registration manager object.
+    final registrationManager = FormRegistrationManager(
+      configList: widget.configList,
+      initialValues: widget.initialValues,
+    );
+
+    /// Form registration wasn't done parent, we'll do it here.
+    if (!widget.formManager.isRegistrationComplete()) {
+      registrationManager.registerForm();
     }
-  }
 
-  @override
-  void dispose() {
-    formManager.disposeAll();
-    super.dispose();
-  }
-
-  /// ----------- State Utility ---------------- ///
-
-  FormFieldDefinition _registerAndBuildFieldByType(
-    GenericFieldConfig config,
-    dynamic initialValue,
-  ) {
-    switch (config.type) {
-      case GenericFieldType.text:
-      case GenericFieldType.email:
-      case GenericFieldType.double:
-      case GenericFieldType.integer:
-      case GenericFieldType.password:
-        formManager.register<String>(config, initialValue: initialValue);
-        return FormFieldDefinition(
-          builder: (fieldConfig) => FieldWrap<String>(
-            withFocus: true,
-            withWrapper: true,
-            config: fieldConfig,
-            builder: (controller) => CustomTextField(controller),
-          ),
-        );
-      case GenericFieldType.date:
-      case GenericFieldType.time:
-      case GenericFieldType.dateTime:
-        formManager.register<DateTime>(config, initialValue: initialValue);
-        return FormFieldDefinition(
-          builder: (fieldConfig) => FieldWrap<DateTime>(
-            withWrapper: true,
-            config: fieldConfig,
-            builder: (controller) => CustomDateTimeField(controller),
-          ),
-        );
-      case GenericFieldType.checkbox:
-        formManager.register<bool>(config, initialValue: initialValue);
-        return FormFieldDefinition(
-          builder: (fieldConfig) => FieldWrap<bool>(
-            config: fieldConfig,
-            builder: (controller) => CustomCheckboxField(controller),
-          ),
-        );
-      case GenericFieldType.dropdown:
-      case GenericFieldType.select:
-        formManager.register<GenericFieldOption>(
-          config,
-          initialValue: initialValue,
-        );
-        return FormFieldDefinition(
-          builder: (fieldConfig) => FieldWrap<GenericFieldOption>(
-            withWrapper: true,
-            config: fieldConfig,
-            builder: (controller) => CustomSelectField(controller),
-          ),
-        );
-      case GenericFieldType.radio:
-        formManager.register<GenericFieldOption>(
-          config,
-          initialValue: initialValue,
-        );
-        return FormFieldDefinition(
-          builder: (fieldConfig) => FieldWrap<GenericFieldOption>(
-            config: fieldConfig,
-            builder: (controller) => CustomRadioboxField(controller),
-          ),
-        );
-      case GenericFieldType.rating:
-        formManager.register<int>(config, initialValue: initialValue);
-        return FormFieldDefinition(
-          builder: (fieldConfig) => FieldWrap<int>(
-            config: fieldConfig,
-            builder: (controller) => CustomRatingField(controller),
-          ),
-        );
-      case GenericFieldType.file:
-        formManager.register<List<Attachment>>(
-          config,
-          initialValue: initialValue,
-        );
-        return FormFieldDefinition(
-          builder: (fieldConfig) => FieldWrap<List<Attachment>>(
-            config: fieldConfig,
-            builder: (controller) => CustomFileField(controller),
-          ),
-        );
-    }
+    /// Build field definitions
+    _definitions = registrationManager.buildFieldDefinitions();
   }
 
   /// ----------- Widget builder ---------------- ///
@@ -166,7 +77,7 @@ class FormProviderState extends State<FormProvider> {
     return groups;
   }
 
-  List<Widget> _arrangeFields() {
+  List<Widget> _arrangeFields(BuildContext ctx) {
     List<Widget> children = [];
     final groupedMap = _convertToGroups();
     final rowSpacing = 10.sp;
@@ -179,7 +90,7 @@ class FormProviderState extends State<FormProvider> {
 
       for (int i = 0; i < groupedList.length; i++) {
         final fieldConfig = groupedList[i];
-        final widget = _map[fieldConfig.name]!.builder(fieldConfig);
+        final widget = _definitions[fieldConfig.name]!.builder(fieldConfig);
 
         if (fieldConfig.halfWidth) {
           if (rowGroup.isEmpty) {
@@ -209,7 +120,13 @@ class FormProviderState extends State<FormProvider> {
       }
 
       if (widget.useGrouping && key != _defaultKey) {
-        children.add(TextUI(key));
+        children.add(
+          TextUI(
+            key,
+            level: TextLevel.titleSmall,
+            color: Theme.of(ctx).colorScheme.onSurface.withAlpha(160),
+          ),
+        );
       }
 
       if (widgetGroup.isNotEmpty) {
@@ -224,12 +141,13 @@ class FormProviderState extends State<FormProvider> {
 
   @override
   Widget build(BuildContext context) {
+    print('Building form');
     return FormScope(
       formManager: formManager,
       child: Column(
-        spacing: 12.sp,
+        spacing: 20.sp,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: _arrangeFields(),
+        children: _arrangeFields(context),
       ),
     );
   }

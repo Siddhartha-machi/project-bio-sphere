@@ -95,8 +95,12 @@ class CustomDateTimeField extends StatelessWidget {
       );
     }
 
+    /// Only change and validate if user select a different value.
     if (newDateTime != controller.data) {
       controller.didChange(newDateTime);
+
+      /// We do the validation when we change the value.
+      controller.validate();
     }
   }
 

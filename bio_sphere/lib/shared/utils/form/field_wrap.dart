@@ -79,12 +79,15 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
     }
 
     if (widget.config.isRequired) {
-      children.add(Icon(FontAwesome.asterisk_solid, size: 8.sp, color: color));
+      children.add(Icon(FontAwesome.asterisk_solid, size: 7.sp, color: color));
     }
 
     return children.isEmpty
         ? const SizedBox.shrink()
-        : Row(spacing: 5, children: children);
+        : Padding(
+            padding: EdgeInsets.only(left: 2.sp, right: 3.sp),
+            child: Row(spacing: 5, children: children),
+          );
   }
 
   Widget _buildErrorWidget(BuildContext ctx, GenericFieldState<T> state) {
@@ -160,6 +163,15 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
                 child: widget.builder(controller),
               )
             : widget.builder(controller),
+
+        if (!Global.isEmptyString(controller.config.helperText))
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 3.sp),
+            child: TextUI(
+              level: TextLevel.caption,
+              controller.config.helperText!,
+            ),
+          ),
       ],
     );
   }

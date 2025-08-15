@@ -150,7 +150,7 @@ class CoreThemeBuilder {
         borderRadius: borderRadius,
       ),
       isDense: true,
-      contentPadding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 5.sp),
+      contentPadding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 8.sp),
     );
   }
 

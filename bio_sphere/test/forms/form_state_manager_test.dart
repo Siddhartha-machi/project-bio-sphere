@@ -60,13 +60,13 @@ void main() {
     test('FM_G4_T1 isValid returns true when all fields valid', () {
       manager.register<String>(textConfig, initialValue: 'abc');
       manager.register<int>(intConfig, initialValue: 42);
-      expect(manager.isValid, isTrue);
+      expect(manager.isValid(), isTrue);
     });
 
     test('FM_G4_T2 isValid returns false when any field has error', () {
       manager.register<String>(textConfig, initialValue: '');
       manager.field<String>('username')!.validate();
-      expect(manager.isValid, isFalse);
+      expect(manager.isValid(), isFalse);
     });
 
     test('FM_G4_T3 error is cleared when valid value is set', () {

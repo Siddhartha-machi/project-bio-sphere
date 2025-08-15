@@ -2,9 +2,12 @@ import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
 
 class FormStateManager {
+  bool _isRegistrationClosed = false;
   final Map<String, GenericFieldController> _fields = {};
 
   void register<T>(GenericFieldConfig config, {T? initialValue}) {
+    if (_isRegistrationClosed) return;
+
     if (_fields.containsKey(config.name)) {
       throw Exception('Field with name ${config.name} is already registered.');
     }
@@ -13,6 +16,10 @@ class FormStateManager {
       initialValue: initialValue,
     );
   }
+
+  bool isRegistrationComplete() => _isRegistrationClosed;
+  
+  void setRegistrationComplete() => _isRegistrationClosed = true;
 
   void unregister<T>(String name) {
     if (_fields.containsKey(name)) _fields.remove(name);
@@ -26,16 +33,27 @@ class FormStateManager {
     return controller as GenericFieldController<T>;
   }
 
-  bool get isValid => _fields.values.every((f) => f.error == null);
-
   Map<String, dynamic> get values {
     return _fields.map((key, controller) => MapEntry(key, controller.value));
   }
 
-  void validateAll<T>() {
-    for (final controller in _fields.values) {
-      controller.validate();
+  bool isValid() {
+    bool isValid = true;
+
+    for (final field in _fields.values) {
+      isValid = isValid && field.isValid();
     }
+
+    return isValid;
+  }
+
+  bool validateAll<T>() {
+    for (final controller in _fields.values) {
+      final isValid = controller.validate();
+      if (!isValid) return false;
+    }
+
+    return true;
   }
 
   void resetAll() {

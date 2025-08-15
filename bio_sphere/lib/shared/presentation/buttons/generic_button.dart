@@ -92,7 +92,7 @@ class GenericButton extends StatelessWidget {
     return SizedBox(height: size, width: size, child: Loaders.spinner(color));
   }
 
-  ButtonStyle _buildButtonStyle({Color? bgColor}) {
+  ButtonStyle _buildButtonStyle({Color? bgColor, Color? borderColor}) {
     ShapeBorder? border;
 
     if (isCircular == true) {
@@ -109,6 +109,9 @@ class GenericButton extends StatelessWidget {
     return ButtonStyle(
       backgroundColor: WidgetStateProperty.all(bgColor),
       shape: WidgetStateProperty.all(border as OutlinedBorder?),
+      side: borderColor != null
+          ? WidgetStateProperty.all(BorderSide(color: borderColor))
+          : null,
     );
   }
 
@@ -129,7 +132,7 @@ class GenericButton extends StatelessWidget {
     } else if (type == ButtonType.outlined) {
       button = OutlinedButton(
         onPressed: pressHandler,
-        style: _buildButtonStyle(),
+        style: _buildButtonStyle(borderColor: bgColor),
         child: isLoading
             ? _buildLoader(bgColor)
             : _buildChild(context, bgColor),
