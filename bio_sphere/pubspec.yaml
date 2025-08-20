@@ -20,11 +20,11 @@ dependencies:
   flutter_bloc: ^8.1.4     # Bloc pattern
 
   # Networking
-  dio: ^5.4.3              # HTTP client
+  dio: ^5.4.3 # HTTP client
 
   # Data persistence
-  hive: ^2.2.3             # Lightweight DB
-  hive_flutter: ^1.1.0     # Hive for Flutter
+  hive: ^2.2.3 # Lightweight DB
+  hive_flutter: ^1.1.0 # Hive for Flutter
   shared_preferences: ^2.5.3
   file_picker: ^10.2.4
 
@@ -33,6 +33,7 @@ dependencies:
 
   # Theme
   json_theme: ^8.0.0+2
+  google_fonts: ^6.2.0
 
   # Icons
   icons_plus: ^5.0.0
