@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:bio_sphere/core/theme/color_schema_builder.dart';
 
 class CoreThemeBuilder {
   final Color error;
-  final MaterialColor primary;
+  final Color primary;
   final Brightness brightness;
 
   CoreThemeBuilder({
@@ -17,112 +20,162 @@ class CoreThemeBuilder {
 
   TextTheme _buildTextTheme(ColorScheme colorScheme) {
     return TextTheme(
-      /// Body text styles
-      bodyLarge: TextStyle(
+      /// Main content text (body)
+      bodyLarge: GoogleFonts.sofiaSans(
         color: colorScheme.onSurface,
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.5,
+        fontSize: 19.sp,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.1,
         decoration: TextDecoration.none,
+        height: 1.6,
       ),
-      bodyMedium: TextStyle(
-        color: colorScheme.onSurface,
+
+      /// Secondary body text (subtext, details)
+      bodyMedium: GoogleFonts.sofiaSans(
+        color: colorScheme.onSurface.withAlpha(230),
+        fontSize: 17.sp,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.05,
+        decoration: TextDecoration.none,
+        height: 1.5,
+      ),
+
+      /// Caption, helper, or hint text
+      bodySmall: GoogleFonts.sofiaSans(
+        color: colorScheme.onSurface.withAlpha(180),
         fontSize: 14.sp,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.25,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.2,
         decoration: TextDecoration.none,
+        height: 1.3,
       ),
-      bodySmall: TextStyle(
-        color: colorScheme.onSurface.withAlpha(200),
-        fontSize: 11.sp,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.4,
-        decoration: TextDecoration.none,
-      ),
-      displayLarge: TextStyle(
+
+      /// Large display (splash, hero, onboarding)
+      displayLarge: GoogleFonts.sofiaSans(
         color: colorScheme.onSurface,
-        fontSize: 60.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: -1.5,
+        fontSize: 44.sp,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -1,
         decoration: TextDecoration.none,
+        shadows: [
+          Shadow(
+            color: colorScheme.onSurface.withAlpha(30),
+            blurRadius: 6,
+            offset: Offset(0, 2),
+          ),
+        ],
+        height: 1.15,
       ),
-      displayMedium: TextStyle(
+
+      /// Page title
+      displayMedium: GoogleFonts.sofiaSans(
         color: colorScheme.onSurface,
-        fontSize: 50.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.5,
+        fontSize: 32.sp,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.2,
         decoration: TextDecoration.none,
+        height: 1.2,
       ),
-      displaySmall: TextStyle(
+
+      /// Section heading
+      displaySmall: GoogleFonts.sofiaSans(
         color: colorScheme.onSurface,
-        fontSize: 40.sp,
-        fontWeight: FontWeight.w700,
+        fontSize: 25.sp,
+        fontWeight: FontWeight.w800,
         letterSpacing: 0,
         decoration: TextDecoration.none,
+        height: 1.2,
       ),
-      headlineLarge: TextStyle(
-        color: colorScheme.onSurface,
+
+      /// Card title, section header
+      headlineLarge: GoogleFonts.sofiaSans(
+        color: colorScheme.primary,
         fontSize: 20.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.25,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.1,
         decoration: TextDecoration.none,
-      ),
-      headlineMedium: TextStyle(
-        color: colorScheme.onSurface,
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0.25,
-        decoration: TextDecoration.none,
-      ),
-      headlineSmall: TextStyle(
-        color: colorScheme.onSurface,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0,
-        decoration: TextDecoration.none,
+        height: 1.25,
       ),
 
-      /// Label styles
-      labelLarge: TextStyle(
-        fontSize: 15.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0,
-        decoration: TextDecoration.none,
-      ),
-      labelMedium: TextStyle(
-        fontSize: 13.sp,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0,
-        decoration: TextDecoration.none,
-      ),
-      labelSmall: TextStyle(
-        fontSize: 12.sp,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0,
-        decoration: TextDecoration.none,
-      ),
-
-      /// Title styles
-      titleLarge: TextStyle(
+      /// Section header
+      headlineMedium: GoogleFonts.sofiaSans(
+        color: colorScheme.onSurface,
         fontSize: 18.sp,
-        letterSpacing: 0.15,
         fontWeight: FontWeight.w800,
-        color: colorScheme.onSurface,
+        letterSpacing: 0.05,
         decoration: TextDecoration.none,
+        height: 1.2,
       ),
-      titleMedium: TextStyle(
+
+      /// Subsection header
+      headlineSmall: GoogleFonts.sofiaSans(
+        color: colorScheme.onSurface,
         fontSize: 16.sp,
-        letterSpacing: 0.15,
         fontWeight: FontWeight.w800,
-        color: colorScheme.onSurface,
+        letterSpacing: 0,
         decoration: TextDecoration.none,
+        height: 1.2,
       ),
-      titleSmall: TextStyle(
+
+      /// Button text
+      labelLarge: GoogleFonts.sofiaSans(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.05,
+        decoration: TextDecoration.none,
+        color: colorScheme.onSurface,
+        height: 1.1,
+        textBaseline: TextBaseline.alphabetic,
+      ),
+
+      /// Input label
+      labelMedium: GoogleFonts.sofiaSans(
         fontSize: 14.sp,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.02,
+        decoration: TextDecoration.none,
+        color: colorScheme.onSurface,
+        height: 1.1,
+      ),
+
+      /// Helper label
+      labelSmall: GoogleFonts.sofiaSans(
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.3,
+        decoration: TextDecoration.none,
+        color: colorScheme.onSurface.withAlpha(180),
+        height: 1.1,
+      ),
+
+      /// App bar title
+      titleLarge: GoogleFonts.sofiaSans(
+        fontSize: 20.sp,
         letterSpacing: 0.1,
         fontWeight: FontWeight.w800,
         color: colorScheme.onSurface,
         decoration: TextDecoration.none,
+        height: 1.2,
+      ),
+
+      /// Dialog title
+      titleMedium: GoogleFonts.sofiaSans(
+        fontSize: 18.sp,
+        letterSpacing: 0.05,
+        fontWeight: FontWeight.w800,
+        color: colorScheme.onSurface,
+        decoration: TextDecoration.none,
+        height: 1.2,
+      ),
+
+      /// Modal title
+      titleSmall: GoogleFonts.sofiaSans(
+        fontSize: 16.sp,
+        letterSpacing: 0.02,
+        fontWeight: FontWeight.w800,
+        color: colorScheme.onSurface,
+        decoration: TextDecoration.none,
+        height: 1.2,
       ),
     );
   }
@@ -157,9 +210,9 @@ class CoreThemeBuilder {
   ThemeData buildTheme() {
     final borderRadius = _borderRadius();
 
-    final colorScheme = ColorScheme.fromSwatch(
-      primarySwatch: primary,
+    final colorScheme = ColorSchemaBuilder.fromSeed(
       errorColor: error,
+      seedColor: primary,
       brightness: brightness,
     );
 
