@@ -76,6 +76,14 @@ class _DateTimeFormatter {
     return '${(diff.inDays / 365).floor()}y ago';
   }
 
+  String formattedTime(DateTime dateTime, {bool as24Hrs = false}) {
+    /// Format as "HH:mm" → 14:45 (24-hour format)
+    if (as24Hrs) return DateFormat('HH:mm').format(dateTime);
+
+    /// Format as "hh:mm a" → 02:45 PM
+    return DateFormat('hh:mm a').format(dateTime);
+  }
+
   String formattedDate(DateTime date, {bool includeTime = true}) {
     final now = DateTime.now();
     final difference = now.difference(date).inDays;

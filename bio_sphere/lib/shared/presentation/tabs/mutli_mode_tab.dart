@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:bio_sphere/shared/utils/form/form_provider.dart';
-import 'package:bio_sphere/shared/utils/form/form_state_manager.dart';
-import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MultiModeTab extends StatefulWidget {
-  final FormStateManager formManager;
-  final List<GenericFieldConfig> configList;
+  final Widget Function() builder;
 
-  const MultiModeTab({
-    super.key,
-    required this.configList,
-    required this.formManager,
-  });
+  const MultiModeTab({super.key, required this.builder});
 
   @override
   State<MultiModeTab> createState() => _MultiModeTabState();
@@ -28,23 +21,16 @@ class _MultiModeTabState extends State<MultiModeTab>
   @override
   void initState() {
     super.initState();
-    _child = _buildChild(); // Built only once
-  }
 
-  Widget _buildChild() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(12),
-      child: FormProvider(
-        useGrouping: true,
-        configList: widget.configList,
-        formManager: widget.formManager,
-      ),
-    );
+    _child = widget.builder(); // Built only once
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return _child;
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 8.sp),
+      child: _child,
+    );
   }
 }
