@@ -2,23 +2,27 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:bio_sphere/shared/utils/form/form_provider.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
 import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:bio_sphere/shared/presentation/tabs/mutli_mode_tab.dart';
 import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/presentation/buttons/generic_button.dart';
 import 'package:bio_sphere/shared/presentation/tabs/multi_mode_tab_controller.dart';
-
-enum FormMode { view, edit, create }
+import 'package:bio_sphere/shared/presentation/forms/form_builders/view_mode_builder.dart';
 
 class MultiModeTabForm extends StatefulWidget {
+  final OpenMode openMode;
   final List<String> tabLabels;
+  final Map<String, dynamic> data;
   final List<List<GenericFieldConfig>> configs;
 
   const MultiModeTabForm({
     super.key,
+    this.data = const {},
     required this.configs,
     required this.tabLabels,
+    this.openMode = OpenMode.view,
   }) : assert(tabLabels.length > 0),
        assert(tabLabels.length == configs.length);
 
@@ -30,12 +34,14 @@ class _MultiModeTabFormState extends State<MultiModeTabForm>
     with SingleTickerProviderStateMixin {
   /// State variables
   late int _tabsCount;
+  late OpenMode _openMode;
   late final TabController _tabController;
-  late final MultiModeTabController _customController;
+  late MultiModeTabController? _customController;
 
   @override
   void initState() {
     super.initState();
+    _openMode = widget.openMode;
 
     _tabsCount = widget.configs.length;
 
@@ -50,18 +56,24 @@ class _MultiModeTabFormState extends State<MultiModeTabForm>
       }
     });
 
-    /// Set up tabs controller
-    _customController = MultiModeTabController(
-      configs: widget.configs,
-      tabController: _tabController,
-    );
+    if (_openMode == OpenMode.view) {
+      _customController = null;
+    } else {
+      /// Register custom controller only in non-view mode
+      _customController = MultiModeTabController(
+        configs: widget.configs,
+        initialValues: widget.data,
+        tabController: _tabController,
+      );
+    }
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    /// DO NOT change the order
+    _customController?.disposeManagers();
 
-    _customController.disposeManagers();
+    _tabController.dispose();
 
     super.dispose();
   }
@@ -74,6 +86,23 @@ class _MultiModeTabFormState extends State<MultiModeTabForm>
   VoidCallback? get _moveRightHandler {
     if (_tabController.index == _tabsCount - 1) return null;
     return () => _tabController.animateTo(_tabController.index + 1);
+  }
+
+  void _changeFormMode() {
+    setState(() {
+      if (_openMode == OpenMode.view) {
+        _openMode = OpenMode.editOrCreate;
+        // Only create controller if not already created
+        _customController ??= MultiModeTabController(
+          configs: widget.configs,
+          initialValues: widget.data,
+          tabController: _tabController,
+        );
+      } else {
+        _openMode = OpenMode.view;
+        // Do NOT dispose or nullify _customController
+      }
+    });
   }
 
   @override
@@ -103,9 +132,23 @@ class _MultiModeTabFormState extends State<MultiModeTabForm>
           child: TabBarView(
             controller: _tabController,
             children: List.generate(_tabsCount, (index) {
+              if (_openMode == OpenMode.view) {
+                return MultiModeTab(
+                  key: ValueKey('view-mode-tab'),
+                  builder: () => ReadOnlyForm(
+                    data: widget.data,
+                    configList: widget.configs[index],
+                  ),
+                );
+              }
+
               return MultiModeTab(
-                configList: widget.configs[index],
-                formManager: _customController.getTabFormManager(index),
+                key: ValueKey('edit-mode-tab'),
+                builder: () => FormProvider(
+                  useGrouping: true,
+                  configList: widget.configs[index],
+                  formManager: _customController!.getTabFormManager(index),
+                ),
               );
             }),
           ),
@@ -123,14 +166,25 @@ class _MultiModeTabFormState extends State<MultiModeTabForm>
                   type: ButtonType.outlined,
                 ),
               ),
-              Expanded(
-                child: GenericButton(
-                  label: 'Submit',
-                  onPressed: () {
-                    _customController.validateAllTabs();
-                  },
+              if (_openMode == OpenMode.view)
+                Expanded(
+                  child: GenericButton(
+                    label: 'Edit',
+                    onPressed: _changeFormMode,
+                  ),
                 ),
-              ),
+
+              if (_openMode != OpenMode.view)
+                Expanded(
+                  child: GenericButton(
+                    label: 'Submit',
+                    onPressed: () {
+                      _changeFormMode();
+                      final result = _customController!.validateAllTabs();
+                      if (result) {}
+                    },
+                  ),
+                ),
             ],
           ),
         ),

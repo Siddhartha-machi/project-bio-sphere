@@ -23,7 +23,7 @@ class MultiModeTabController {
       /// Create a registration manager to do register etc
       final registrationManager = FormRegistrationManager(
         configList: config,
-        initialValues: {},
+        initialValues: initialValues,
       );
 
       /// Form registers all fields with initial values filled if any provided.
@@ -35,10 +35,12 @@ class MultiModeTabController {
   }
 
   validateAllTabs() {
+    bool isTabValid = false;
+
     for (int index = 0; index < configs.length; index++) {
       /// If the tab is not loaded, do it before validating
 
-      final isTabValid = _formControllers[index].validateAll();
+      isTabValid = _formControllers[index].validateAll();
 
       if (!isTabValid) {
         if (index != tabController.index) {
@@ -47,6 +49,8 @@ class MultiModeTabController {
         break;
       }
     }
+
+    return isTabValid;
   }
 
   FormStateManager getTabFormManager(int index) => _formControllers[index];
