@@ -35,6 +35,7 @@ migrate_working_dir/
 
 # App related ignores
 /lib/dev_untracked
+/lib/lab
 
 # Symbolication related
 app.*.symbols
