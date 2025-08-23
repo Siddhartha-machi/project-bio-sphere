@@ -17,10 +17,10 @@ class CustomCheckboxField extends StatelessWidget {
   Widget build(BuildContext context) {
     final isChecked = controller.data == true;
 
-    return InkWell(
+    return GestureDetector(
       onTap: () => controller.didChange(!(controller.data ?? false)),
       child: Padding(
-        padding: const EdgeInsetsGeometry.fromLTRB(12, 8, 12, 8),
+        padding: EdgeInsetsGeometry.only(left: 3.sp),
         child: Row(
           spacing: 12.sp,
           children: [
@@ -28,7 +28,7 @@ class CustomCheckboxField extends StatelessWidget {
               Expanded(
                 child: TextUI(
                   controller.config.hintText!,
-                  level: TextLevel.bodySmall,
+                  level: TextLevel.labelSmall,
                 ),
               ),
             Icon(

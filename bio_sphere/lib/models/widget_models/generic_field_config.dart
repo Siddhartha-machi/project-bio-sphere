@@ -18,7 +18,9 @@ enum GenericFieldType {
   dateTime,
 
   /// Advanced
+  url,
   file,
+  objectList,
 
   /// Feedback
   rating,
@@ -78,7 +80,6 @@ class GenericFieldConfig<T> {
 
 class GenericFieldOption {
   const GenericFieldOption({
-    this.helperText,
     this.iconConfig,
     this.description,
     required this.value,
@@ -88,6 +89,5 @@ class GenericFieldOption {
   final String value;
   final String label;
   final int? iconConfig;
-  final String? helperText;
   final String? description;
 }

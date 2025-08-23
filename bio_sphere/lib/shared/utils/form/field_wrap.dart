@@ -65,16 +65,20 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
     if (widget.config.prefixIcon != null) {
       children.add(
         Icon(
-          IconData(widget.config.prefixIcon!, fontFamily: 'MaterialIcons'),
-          size: 16.sp,
+          size: 13.sp,
           color: color,
+          FontAwesomeIconData(widget.config.prefixIcon!),
         ),
       );
     }
 
     if (!Global.isEmptyString(widget.config.label)) {
       children.add(
-        TextUI(widget.config.label!, level: TextLevel.labelSmall, color: color),
+        TextUI(
+          widget.config.label!,
+          level: TextLevel.labelMedium,
+          color: color,
+        ),
       );
     }
 
@@ -86,7 +90,7 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
         ? const SizedBox.shrink()
         : Padding(
             padding: EdgeInsets.only(left: 2.sp, right: 3.sp),
-            child: Row(spacing: 5, children: children),
+            child: Row(spacing: 6.sp, children: children),
           );
   }
 
@@ -94,7 +98,10 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
     final color = Theme.of(ctx).colorScheme.error;
     return Tooltip(
       message: state.error!,
-      child: Icon(FontAwesome.circle_info_solid, color: color, size: 13.sp),
+      child: Padding(
+        padding: EdgeInsets.only(right: 2.sp),
+        child: Icon(FontAwesome.circle_info_solid, color: color, size: 13.sp),
+      ),
     );
   }
 
@@ -134,7 +141,7 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
     GenericFieldState<T> state,
   ) {
     return Column(
-      spacing: 5,
+      spacing: 10.sp,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
@@ -167,9 +174,23 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
         if (!Global.isEmptyString(controller.config.helperText))
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 3.sp),
-            child: TextUI(
-              level: TextLevel.caption,
-              controller.config.helperText!,
+            child: Row(
+              spacing: 8.sp,
+              children: [
+                Icon(
+                  size: 14.sp,
+                  FontAwesome.circle_info_solid,
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+                Expanded(
+                  child: TextUI(
+                    level: TextLevel.labelSmall,
+                    controller.config.helperText!,
+                    color: Theme.of(context).colorScheme.tertiary,
+                    // Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
             ),
           ),
       ],

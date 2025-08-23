@@ -1,4 +1,7 @@
 import 'package:bio_sphere/models/data/attachment.dart';
+import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
+import 'package:bio_sphere/shared/utils/adapters/field_meta.dart';
+import 'package:bio_sphere/shared/utils/adapters/value_coercers.dart';
 import 'package:bio_sphere/shared/utils/form/field_wrap.dart';
 import 'package:bio_sphere/shared/utils/form/form_state_manager.dart';
 import 'package:bio_sphere/shared/utils/form/form_field_definition.dart';
@@ -26,8 +29,22 @@ class FormRegistrationManager {
   FormStateManager registerForm() {
     final formManager = FormStateManager();
 
+    final coercer = ValueCoercer.withDefaults();
+
     for (final config in configList) {
-      _registerFieldByType(formManager, config);
+      dynamic initialValue = initialValues[config.name];
+
+      if (initialValue != null) {
+        initialValue = coercer.coerce(
+          initialValue,
+          CoercionContext(
+            type: config.type,
+            meta: FieldMeta(extra: {'config': config}),
+          ),
+        );
+      }
+
+      _registerFieldByType(formManager, config, initialValue);
     }
 
     formManager.setRegistrationComplete();
@@ -49,21 +66,25 @@ class FormRegistrationManager {
   _registerFieldByType(
     FormStateManager formManager,
     GenericFieldConfig config,
+    dynamic initialValue,
   ) {
-    final initialValue = initialValues[config.name];
-
     switch (config.type) {
       case GenericFieldType.text:
       case GenericFieldType.email:
       case GenericFieldType.double:
       case GenericFieldType.integer:
       case GenericFieldType.password:
-        formManager.register<String>(config, initialValue: initialValue);
+        formManager.register<String>(
+          config,
+          initialValue: initialValue?.toString(),
+        );
 
       case GenericFieldType.date:
       case GenericFieldType.time:
       case GenericFieldType.dateTime:
-        formManager.register<DateTime>(config, initialValue: initialValue);
+        DateTime? value;
+        if (initialValue is String) value = DateTime.parse(initialValue);
+        formManager.register<DateTime>(config, initialValue: value);
 
       case GenericFieldType.checkbox:
         formManager.register<bool>(config, initialValue: initialValue);
@@ -89,6 +110,8 @@ class FormRegistrationManager {
           config,
           initialValue: initialValue,
         );
+      default:
+        throw Exception('Unsupported type provided.');
     }
   }
 
@@ -160,6 +183,15 @@ class FormRegistrationManager {
             builder: (controller) => CustomFileField(controller),
           ),
         );
+      case GenericFieldType.url:
+        return FormFieldDefinition(
+          builder: (fieldConfig) => FieldWrap<Uri>(
+            config: fieldConfig,
+            builder: (controller) => TextUI('URL field'),
+          ),
+        );
+      default:
+        throw Exception('Unsupported type ${config.type.name} provided.');
     }
   }
 }

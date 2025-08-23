@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
 import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:bio_sphere/shared/presentation/ui_feedback/loaders.dart';
 
@@ -71,13 +72,7 @@ class GenericButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (prefixIcon != null) Icon(prefixIcon, color: txtColor, size: size),
-        if (label != null)
-          Text(
-            label!,
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(color: txtColor),
-          ),
+        if (label != null) TextUI(label!, color: txtColor),
         if (suffixIcon != null) Icon(suffixIcon, color: txtColor, size: size),
       ],
     );

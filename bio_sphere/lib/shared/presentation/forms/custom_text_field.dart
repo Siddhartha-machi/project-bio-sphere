@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
 
@@ -51,8 +49,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         fillColor: Colors.transparent,
         enabledBorder: InputBorder.none,
       ),
-      style: TextStyle(fontSize: 12.sp),
       onChanged: widget.controller.didChange,
+      style: Theme.of(context).textTheme.bodySmall,
       obscureText: config.type == GenericFieldType.password,
     );
   }
