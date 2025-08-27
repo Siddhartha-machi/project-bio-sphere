@@ -11,7 +11,7 @@ import 'package:bio_sphere/shared/utils/adapters/value_coercers.dart';
 import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/constants/widget/text_widget_enums.dart';
-import 'package:bio_sphere/shared/presentation/buttons/generic_button.dart';
+import 'package:bio_sphere/shared/presentation/buttons/generic_icon_button.dart';
 
 /// --------------- Base Render class definition --------------- ///
 
@@ -117,12 +117,10 @@ class URLFieldRenderer extends BaseFieldRenderer<Uri> {
     return Row(
       children: [
         Expanded(child: TextUI(data.origin, level: TextLevel.bodySmall)),
-        GenericButton(
-          height: 30,
-          isCircular: true,
+        GenericIconButton(
           type: ButtonType.text,
           onPressed: _handleURLClick,
-          prefixIcon: FontAwesome.link_solid,
+          icon: FontAwesome.link_solid,
         ),
       ],
     );
@@ -323,11 +321,10 @@ class FileFiledRenderer extends BaseFieldRenderer<List<Attachment>> {
               ),
             ),
             if (onDeleteHandler != null)
-              GenericButton(
-                isCircular: true,
+              GenericIconButton(
+                icon: Icons.delete,
                 type: ButtonType.text,
                 variant: ButtonVariant.error,
-                prefixIcon: Icons.delete,
                 onPressed: () => onDeleteHandler!(ctx, item),
               ),
           ],

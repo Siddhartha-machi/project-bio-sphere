@@ -23,7 +23,8 @@ class _NumberFormatter {
     if (absValue >= 1e12) return format(value / 1e12, 'T');
     if (absValue >= 1e9) return format(value / 1e9, 'B');
     if (absValue >= 1e6) return format(value / 1e6, 'M');
-    if (absValue >= 1e3) return format(value / 1e3, 'K');
+    if (absValue >= 1e2) return format(value / 1e3, 'K');
+
     return value.toString();
   }
 

@@ -10,7 +10,6 @@ class GenericButton extends StatelessWidget {
   const GenericButton({
     super.key,
     this.color,
-    this.label,
     this.height,
     this.iconSize,
     this.textColor,
@@ -18,6 +17,7 @@ class GenericButton extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.borderRadius,
+    required this.label,
     this.isLoading = false,
     this.fullwidth = false,
     this.isCircular = false,
@@ -25,7 +25,7 @@ class GenericButton extends StatelessWidget {
     this.variant = ButtonVariant.primary,
   });
 
-  final String? label;
+  final String label;
   final Color? color;
   final bool fullwidth;
   final double? height;
@@ -72,7 +72,9 @@ class GenericButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (prefixIcon != null) Icon(prefixIcon, color: txtColor, size: size),
-        if (label != null) TextUI(label!, color: txtColor),
+
+        TextUI(label, color: txtColor),
+
         if (suffixIcon != null) Icon(suffixIcon, color: txtColor, size: size),
       ],
     );
