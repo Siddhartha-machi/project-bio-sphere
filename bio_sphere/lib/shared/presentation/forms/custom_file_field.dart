@@ -11,6 +11,7 @@ import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:bio_sphere/shared/constants/widget/text_widget_enums.dart';
 import 'package:bio_sphere/shared/presentation/buttons/generic_button.dart';
 import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
+import 'package:bio_sphere/shared/presentation/buttons/generic_icon_button.dart';
 import 'package:bio_sphere/shared/presentation/ui_feedback/in_app_feedback.dart';
 
 class CustomFileField extends StatelessWidget {
@@ -133,11 +134,10 @@ class CustomFileField extends StatelessWidget {
                 ],
               ),
             ),
-            GenericButton(
-              isCircular: true,
+            GenericIconButton(
+              icon: Icons.delete,
               type: ButtonType.text,
               variant: ButtonVariant.error,
-              prefixIcon: Icons.delete,
               onPressed: () => _onDeleteHandler(ctx, item),
             ),
           ],

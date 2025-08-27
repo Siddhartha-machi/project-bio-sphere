@@ -16,7 +16,7 @@ class CoreThemeBuilder {
     this.error = Colors.redAccent,
   });
 
-  static _borderRadius() => 3.sp;
+  static _borderRadius() => 0.sp;
 
   TextTheme _buildTextTheme(ColorScheme colorScheme) {
     return TextTheme(
@@ -223,6 +223,14 @@ class CoreThemeBuilder {
       textTheme: txtTheme,
       colorScheme: colorScheme,
       inputDecorationTheme: _buildInputDecoration(colorScheme, txtTheme),
+
+      cardTheme: CardThemeData(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius * 1.5),
+        ),
+        margin: const EdgeInsets.all(0),
+      ),
 
       /// Ripple styles
       splashColor: colorScheme.primary.withAlpha(25),

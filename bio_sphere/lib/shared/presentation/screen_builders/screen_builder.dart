@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:bio_sphere/shared/utils/style.dart';
@@ -8,8 +9,8 @@ import 'package:bio_sphere/models/widget_models/bread_crumb.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
 import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:bio_sphere/shared/constants/widget/text_widget_enums.dart';
-import 'package:bio_sphere/shared/presentation/buttons/generic_button.dart';
 import 'package:bio_sphere/shared/presentation/components/bread_crumbs.dart';
+import 'package:bio_sphere/shared/presentation/buttons/generic_icon_button.dart';
 
 /// A reusable screen scaffold widget with gradient app bar, breadcrumbs, and optional FAB.
 ///
@@ -56,11 +57,17 @@ class ScreenBuilder extends StatelessWidget {
 
   /// Returns a gradient decoration for the app bar background.
   Decoration _gradientDecoration(BuildContext context) {
+    final theme = Theme.of(context);
+    final adapterFun = theme.brightness == Brightness.light
+        ? Style.lighter
+        : Style.darken;
+
     return BoxDecoration(
       gradient: LinearGradient(
         colors: [
-          Style.darken(Theme.of(context).primaryColor),
-          Theme.of(context).primaryColor,
+          adapterFun(theme.primaryColor),
+          theme.primaryColor,
+          adapterFun(theme.primaryColor),
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -70,13 +77,14 @@ class ScreenBuilder extends StatelessWidget {
 
   /// Handles the home/back button press.
   void _onHomePressed(BuildContext context) {
+    /// TODO: create a util class for safe navigation.
     void Function(BuildContext) popFun = Navigator.of(context).pop;
 
     if (onHomePressed != null) {
       popFun = onHomePressed!;
     }
 
-    popFun(context);
+    if (context.canPop()) popFun(context);
   }
 
   /// Builds the custom app bar with gradient, title, breadcrumbs, and actions.
@@ -86,12 +94,11 @@ class ScreenBuilder extends StatelessWidget {
       actions: appBarActions,
       title: _buildTitle(context),
       toolbarHeight: kToolbarHeight + 12.sp,
-      leading: GenericButton(
-        isCircular: true,
+      leading: GenericIconButton(
         type: ButtonType.text,
         variant: ButtonVariant.secondary,
+        icon: Icons.arrow_back_ios_new_sharp,
         onPressed: () => _onHomePressed(context),
-        prefixIcon: Icons.arrow_back_ios_new_sharp,
       ),
       flexibleSpace: Container(decoration: _gradientDecoration(context)),
     );
@@ -100,11 +107,7 @@ class ScreenBuilder extends StatelessWidget {
   /// Builds the floating action button if [onAddPressed] is provided.
   Widget? _buildFAB() {
     if (onAddPressed != null) {
-      return GenericButton(
-        isCircular: true,
-        onPressed: onAddPressed!,
-        prefixIcon: Icons.add,
-      );
+      return GenericIconButton(icon: Icons.add, onPressed: onAddPressed!);
     }
     return null;
   }

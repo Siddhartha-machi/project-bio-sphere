@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
+import 'package:icons_plus/icons_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
 
 class MultiModeTab extends StatefulWidget {
   final Widget Function() builder;
@@ -21,16 +25,36 @@ class _MultiModeTabState extends State<MultiModeTab>
   @override
   void initState() {
     super.initState();
+    try {
+      _child = _buildChild(); // Built only once
+    } catch (err) {
+      _child = _errorFallback(err);
+    }
+  }
 
-    _child = widget.builder(); // Built only once
+  /// TODO : refactor to a global handler
+  Widget _errorFallback(err) {
+    return Column(
+      spacing: 12.sp,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(FontAwesome.triangle_exclamation_solid, color: Colors.red),
+        TextUI('Unable to render the tab.'),
+        if (kDebugMode) TextUI(err?.toString() ?? 'Unknown error'),
+      ],
+    );
+  }
+
+  Widget _buildChild() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 8.sp),
+      child: widget.builder(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 8.sp),
-      child: _child,
-    );
+    return _child;
   }
 }

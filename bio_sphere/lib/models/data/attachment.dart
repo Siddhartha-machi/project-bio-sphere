@@ -1,11 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:bio_sphere/models/interfaces/base_data_model.dart';
+import 'package:bio_sphere/models/interfaces/api_data_model.dart';
 
 part 'attachment.g.dart';
 
 @JsonSerializable()
-class Attachment implements BaseDataModel {
+class Attachment implements APIDataModel {
   const Attachment({
     required this.id,
     required this.url,
@@ -26,6 +26,4 @@ class Attachment implements BaseDataModel {
 
   @override
   Map<String, dynamic> get toJson => _$AttachmentToJson(this);
-  @override
-  Map<String, dynamic> get toMinJson => _$AttachmentToJson(this);
 }

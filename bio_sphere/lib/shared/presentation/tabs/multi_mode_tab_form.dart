@@ -8,6 +8,7 @@ import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:bio_sphere/shared/presentation/tabs/mutli_mode_tab.dart';
 import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/presentation/buttons/generic_button.dart';
+import 'package:bio_sphere/shared/presentation/buttons/generic_icon_button.dart';
 import 'package:bio_sphere/shared/presentation/tabs/multi_mode_tab_controller.dart';
 import 'package:bio_sphere/shared/presentation/forms/form_builders/view_mode_builder.dart';
 
@@ -109,30 +110,31 @@ class _MultiModeTabFormState extends State<MultiModeTabForm>
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Top navigation row with left/right tab buttons and current tab label
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GenericButton(
-              isCircular: true,
+            GenericIconButton(
               type: ButtonType.text,
+              icon: Icons.arrow_back,
               onPressed: _moveLeftHandler,
-              prefixIcon: Icons.arrow_back,
             ),
             TextUI(widget.tabLabels[_tabController.index]),
-            GenericButton(
-              isCircular: true,
+            GenericIconButton(
               type: ButtonType.text,
+              icon: Icons.arrow_forward,
               onPressed: _moveRightHandler,
-              prefixIcon: Icons.arrow_forward,
             ),
           ],
         ),
 
+        // Tab content area: shows either read-only or editable form depending on mode
         Expanded(
           child: TabBarView(
             controller: _tabController,
             children: List.generate(_tabsCount, (index) {
               if (_openMode == OpenMode.view) {
+                // Read-only view mode
                 return MultiModeTab(
                   key: ValueKey('view-mode-tab'),
                   builder: () => ReadOnlyForm(
@@ -142,6 +144,7 @@ class _MultiModeTabFormState extends State<MultiModeTabForm>
                 );
               }
 
+              // Edit/Create mode with form provider
               return MultiModeTab(
                 key: ValueKey('edit-mode-tab'),
                 builder: () => FormProvider(
@@ -154,6 +157,7 @@ class _MultiModeTabFormState extends State<MultiModeTabForm>
           ),
         ),
 
+        // Bottom action row: Cancel, Edit, or Submit buttons depending on mode
         Padding(
           padding: EdgeInsets.fromLTRB(12.sp, 8.sp, 12.sp, 30.sp),
           child: Row(
