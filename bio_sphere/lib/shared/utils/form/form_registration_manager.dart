@@ -17,18 +17,18 @@ import 'package:bio_sphere/shared/presentation/forms/custom_date_time_field.dart
 /// External registration plugin class
 /// to register fields and build definitions form config.
 class FormRegistrationManager {
+  final FormStateManager formManager;
   final Map<String, dynamic> initialValues;
   final List<GenericFieldConfig> configList;
 
   const FormRegistrationManager({
     required this.configList,
+    required this.formManager,
     this.initialValues = const {},
   });
 
   /// Only register fields with the state manager.
-  FormStateManager registerForm() {
-    final formManager = FormStateManager();
-
+  void registerForm() {
     final coercer = ValueCoercer.withDefaults();
 
     for (final config in configList) {
@@ -48,8 +48,6 @@ class FormRegistrationManager {
     }
 
     formManager.setRegistrationComplete();
-
-    return formManager;
   }
 
   /// Builds fields definition objects from config.

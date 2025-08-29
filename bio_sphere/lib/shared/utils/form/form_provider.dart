@@ -31,6 +31,7 @@ class FormProvider extends StatefulWidget {
 
 class _FormProviderState extends State<FormProvider> {
   late final FormStateManager formManager;
+  late final FormLayoutEngine _layoutEngine;
   late final Map<String, FormFieldDefinition> _definitions;
 
   /// ----------- Life cycle methods ---------------- ///
@@ -41,31 +42,35 @@ class _FormProviderState extends State<FormProvider> {
 
     /// Create registration manager object.
     final registrationManager = FormRegistrationManager(
+      formManager: formManager,
       configList: widget.configList,
       initialValues: widget.initialValues,
     );
 
     /// Form registration wasn't done parent, we'll do it here.
-    if (!widget.formManager.isRegistrationComplete()) {
+    if (!formManager.isRegistrationComplete()) {
       registrationManager.registerForm();
     }
 
     /// Build field definitions
     _definitions = registrationManager.buildFieldDefinitions();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    final layoutEngine = FormLayoutEngine(
+    // TODO: try optimization by building the layout here once
+    _layoutEngine = FormLayoutEngine(
       buildersMap: _definitions,
       contentPadding: (5, 10, 5, 0),
       configList: widget.configList,
       columnSpacing: widget.colSpacing,
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return FormScope(
       formManager: formManager,
-      child: layoutEngine.buildLayoutWithGrouping(),
+      child: widget.useGrouping
+          ? _layoutEngine.buildLayoutWithGrouping()
+          : _layoutEngine.buildLayout(),
     );
   }
 }
