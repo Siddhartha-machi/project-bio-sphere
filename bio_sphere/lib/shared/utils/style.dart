@@ -52,4 +52,18 @@ class Style {
       return hsl.withLightness(lightness).toColor();
     });
   }
+
+  static double themeBorderRadius(BuildContext ctx) {
+    double radiusValue;
+    try {
+      final shape = Theme.of(ctx).cardTheme.shape as RoundedRectangleBorder;
+      final radius = (shape.borderRadius as BorderRadius).topLeft;
+
+      radiusValue = radius.x;
+    } catch (e) {
+      radiusValue = 0.0;
+    }
+
+    return radiusValue;
+  }
 }

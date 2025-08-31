@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 import 'package:bio_sphere/shared/presentation/ui_feedback/loaders.dart';
 
@@ -8,10 +10,10 @@ class GenericIconButton extends StatelessWidget {
     super.key,
     this.height,
     this.bgColor,
-    this.iconSize,
     this.iconColor,
     this.onPressed,
     this.borderRadius,
+    this.iconSize = 18,
     required this.icon,
     this.isLoading = false,
     this.type = ButtonType.filled,
@@ -23,8 +25,8 @@ class GenericIconButton extends StatelessWidget {
   final bool isLoading;
   final double? height;
   final ButtonType type;
+  final double iconSize;
   final Color? iconColor;
-  final double? iconSize;
   final double? borderRadius;
   final ButtonVariant variant;
   final VoidCallback? onPressed;
@@ -65,27 +67,28 @@ class GenericIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget button;
+    final effIconSize = iconSize.sp;
     final pressHandler = isLoading ? null : onPressed;
     final [kBgColor, kIconColor] = _buildColors(context);
 
     if (type == ButtonType.filled) {
       button = IconButton.filled(
         color: kIconColor,
-        iconSize: iconSize,
+        iconSize: effIconSize,
         onPressed: pressHandler,
         icon: isLoading ? _buildLoader(kBgColor) : Icon(icon),
       );
     } else if (type == ButtonType.outlined) {
       button = IconButton.outlined(
         color: kIconColor,
-        iconSize: iconSize,
+        iconSize: effIconSize,
         onPressed: pressHandler,
         icon: isLoading ? _buildLoader(kBgColor) : Icon(icon),
       );
     } else {
       button = IconButton(
         color: kBgColor,
-        iconSize: iconSize,
+        iconSize: effIconSize,
         onPressed: pressHandler,
         padding: EdgeInsets.zero,
         icon: isLoading ? _buildLoader(kBgColor) : Icon(icon),

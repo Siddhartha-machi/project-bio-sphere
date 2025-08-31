@@ -87,19 +87,36 @@ class _DateTimeFormatter {
 
   String formattedDate(DateTime date, {bool includeTime = true}) {
     final now = DateTime.now();
-    final difference = now.difference(date).inDays;
 
-    if (difference == 0) {
-      return 'Today at ${DateFormat.jm().format(date)}';
-    } else if (difference == 1) {
-      return 'Yesterday at ${DateFormat.jm().format(date)}';
-    } else if (difference < 7) {
-      return '${DateFormat.EEEE().format(date)} at ${DateFormat.jm().format(date)}'; // e.g., Monday at 3:00 PM
+    // Normalize both to midnight for day difference
+    final today = DateTime(now.year, now.month, now.day);
+    final targetDay = DateTime(date.year, date.month, date.day);
+
+    final dayDifference = targetDay.difference(today).inDays;
+
+    String timePart = includeTime ? " at ${DateFormat.jm().format(date)}" : "";
+
+    if (dayDifference == 0) {
+      // today
+      return includeTime ? "Today$timePart" : "Today";
+    } else if (dayDifference == -1) {
+      // yesterday
+      return includeTime ? "Yesterday$timePart" : "Yesterday";
+    } else if (dayDifference == 1) {
+      // tomorrow
+      return includeTime ? "Tomorrow$timePart" : "Tomorrow";
+    } else if (dayDifference < 0 && dayDifference >= -6) {
+      // within last 7 days
+      return "${DateFormat('EEEE').format(date)}$timePart";
+    } else if (dayDifference > 0 && dayDifference <= 6) {
+      // within next 7 days
+      return "${DateFormat('EEEE').format(date)}$timePart";
     } else if (date.year == now.year) {
+      // same year
       final fStr = includeTime ? "MMM d 'at' h:mm a" : 'MMM d';
       return DateFormat(fStr).format(date);
     } else {
-      // e.g., Jan 10, 2023 at 3:00 PM
+      // different year
       final fStr = includeTime ? "MMM d, yyyy 'at' h:mm a" : 'MMM d, yyyy';
       return DateFormat(fStr).format(date);
     }

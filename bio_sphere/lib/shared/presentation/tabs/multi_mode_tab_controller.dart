@@ -20,14 +20,17 @@ class MultiModeTabController {
 
   void _initializeController() {
     for (final config in configs) {
+      final formManager = FormStateManager();
+
       /// Create a registration manager to do register etc
       final registrationManager = FormRegistrationManager(
         configList: config,
+        formManager: formManager,
         initialValues: initialValues,
       );
 
       /// Form registers all fields with initial values filled if any provided.
-      final formManager = registrationManager.registerForm();
+      registrationManager.registerForm();
 
       /// For every form add a manager with fields registered.
       _formControllers.add(formManager);

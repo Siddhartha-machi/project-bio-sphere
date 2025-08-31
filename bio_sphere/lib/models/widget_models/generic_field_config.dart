@@ -21,6 +21,11 @@ enum GenericFieldType {
   url,
   file,
   objectList,
+  multiSelect,
+
+  /// Misc
+  freeRange,
+  fixedRange,
 
   /// Feedback
   rating,
@@ -42,6 +47,7 @@ class GenericFieldConfig<T> {
   final String? hintText;
   final String? helperText;
   final dynamic showIfValue;
+  final Map<String, dynamic> extra;
   final List<GenericFieldOption>? options; // For dropdown, radio, etc.
   final Map<String, dynamic>? dependencies;
 
@@ -73,6 +79,7 @@ class GenericFieldConfig<T> {
     this.dependencies,
     required this.name,
     required this.type,
+    this.extra = const {},
     this.halfWidth = false,
     this.isRequired = false,
   });

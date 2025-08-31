@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:bio_sphere/shared/utils/style.dart';
 import 'package:bio_sphere/shared/utils/global.dart';
 import 'package:bio_sphere/shared/utils/form/form_scope.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
@@ -61,37 +62,43 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
       color = theme.colorScheme.primary;
     }
 
-    final children = <Widget>[];
-    if (widget.config.prefixIcon != null) {
-      children.add(
-        Icon(
-          size: 13.sp,
-          color: color,
-          FontAwesomeIconData(widget.config.prefixIcon!),
-        ),
-      );
-    }
+    return Padding(
+      padding: EdgeInsets.only(left: 2.sp, right: 3.sp),
+      child: Row(
+        spacing: 6.sp,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                if (widget.config.prefixIcon != null)
+                  Icon(
+                    size: 13.sp,
+                    color: color,
+                    FontAwesomeIconData(widget.config.prefixIcon!),
+                  ),
 
-    if (!Global.isEmptyString(widget.config.label)) {
-      children.add(
-        TextUI(
-          widget.config.label!,
-          level: TextLevel.labelMedium,
-          color: color,
-        ),
-      );
-    }
+                Expanded(
+                  child: TextUI(
+                    '${widget.config.label!} *',
+                    level: TextLevel.labelMedium,
+                    color: color,
+                  ),
+                ),
 
-    if (widget.config.isRequired) {
-      children.add(Icon(FontAwesome.asterisk_solid, size: 7.sp, color: color));
-    }
+                if (widget.config.suffixIcon != null)
+                  Icon(
+                    size: 13.sp,
+                    color: color,
+                    FontAwesomeIconData(widget.config.suffixIcon!),
+                  ),
+              ],
+            ),
+          ),
 
-    return children.isEmpty
-        ? const SizedBox.shrink()
-        : Padding(
-            padding: EdgeInsets.only(left: 2.sp, right: 3.sp),
-            child: Row(spacing: 6.sp, children: children),
-          );
+          if (state.error != null) _buildErrorWidget(ctx, state),
+        ],
+      ),
+    );
   }
 
   Widget _buildErrorWidget(BuildContext ctx, GenericFieldState<T> state) {
@@ -144,23 +151,16 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
       spacing: 10.sp,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: _buildFieldLabel(
-                ctx,
-                state,
-                _focusNode?.hasFocus ?? false,
-              ),
-            ),
-            if (state.error != null) _buildErrorWidget(ctx, state),
-          ],
-        ),
+        if (!Global.isEmptyString(widget.config.label))
+          _buildFieldLabel(ctx, state, _focusNode?.hasFocus ?? false),
 
         widget.withWrapper
             ? Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.sp),
+                  color: Theme.of(ctx).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(
+                    Style.themeBorderRadius(context),
+                  ),
                   border: _buildBorderFromState(
                     ctx,
                     state,
@@ -187,7 +187,6 @@ class _FieldWrapState<T> extends State<FieldWrap<T>> {
                     level: TextLevel.labelSmall,
                     controller.config.helperText!,
                     color: Theme.of(context).colorScheme.tertiary,
-                    // Theme.of(context).primaryColor,
                   ),
                 ),
               ],

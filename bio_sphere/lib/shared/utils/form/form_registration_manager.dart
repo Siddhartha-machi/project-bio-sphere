@@ -1,13 +1,18 @@
+import 'package:flutter/material.dart';
+
 import 'package:bio_sphere/models/data/attachment.dart';
+import 'package:bio_sphere/shared/utils/form/field_wrap.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
 import 'package:bio_sphere/shared/utils/adapters/field_meta.dart';
 import 'package:bio_sphere/shared/utils/adapters/value_coercers.dart';
-import 'package:bio_sphere/shared/utils/form/field_wrap.dart';
 import 'package:bio_sphere/shared/utils/form/form_state_manager.dart';
 import 'package:bio_sphere/shared/utils/form/form_field_definition.dart';
 import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
+import 'package:bio_sphere/shared/presentation/forms/free_range_field.dart';
 import 'package:bio_sphere/shared/presentation/forms/custom_file_field.dart';
 import 'package:bio_sphere/shared/presentation/forms/custom_text_field.dart';
+import 'package:bio_sphere/shared/presentation/forms/fixed_range_field.dart';
+import 'package:bio_sphere/shared/presentation/forms/multi_select_field.dart';
 import 'package:bio_sphere/shared/presentation/forms/custom_rating_field.dart';
 import 'package:bio_sphere/shared/presentation/forms/custom_select_field.dart';
 import 'package:bio_sphere/shared/presentation/forms/custom_checkbox_field.dart';
@@ -108,6 +113,15 @@ class FormRegistrationManager {
           config,
           initialValue: initialValue,
         );
+      case GenericFieldType.freeRange:
+      case GenericFieldType.fixedRange:
+        formManager.register<RangeValues>(config, initialValue: initialValue);
+      case GenericFieldType.multiSelect:
+        formManager.register<Set<GenericFieldOption>>(
+          config,
+          initialValue: initialValue,
+        );
+
       default:
         throw Exception('Unsupported type provided.');
     }
@@ -186,6 +200,28 @@ class FormRegistrationManager {
           builder: (fieldConfig) => FieldWrap<Uri>(
             config: fieldConfig,
             builder: (controller) => TextUI('URL field'),
+          ),
+        );
+      case GenericFieldType.fixedRange:
+        return FormFieldDefinition(
+          builder: (fieldConfig) => FieldWrap<RangeValues>(
+            config: fieldConfig,
+            builder: (controller) => FixedRangeField(controller),
+          ),
+        );
+
+      case GenericFieldType.freeRange:
+        return FormFieldDefinition(
+          builder: (fieldConfig) => FieldWrap<RangeValues>(
+            config: fieldConfig,
+            builder: (controller) => FreeRangeField(controller),
+          ),
+        );
+      case GenericFieldType.multiSelect:
+        return FormFieldDefinition(
+          builder: (fieldConfig) => FieldWrap<Set<GenericFieldOption>>(
+            config: fieldConfig,
+            builder: (controller) => MultiSelectField(controller),
           ),
         );
       default:

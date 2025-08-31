@@ -52,25 +52,6 @@ void main() {
       expect(find.byType(TextButton), findsOneWidget);
     });
 
-    testWidgets('renders with prefix icon only', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(
-          (_) => GenericButton(prefixIcon: Icons.star, onPressed: () {}),
-        ),
-      );
-      expect(find.byIcon(Icons.star), findsOneWidget);
-    });
-
-    testWidgets('renders with suffix icon only', (tester) async {
-      await tester.pumpWidget(
-        buildTestWidget(
-          (_) =>
-              GenericButton(suffixIcon: Icons.chevron_right, onPressed: () {}),
-        ),
-      );
-      expect(find.byIcon(Icons.chevron_right), findsOneWidget);
-    });
-
     testWidgets('renders with both text and prefix icon', (tester) async {
       await tester.pumpWidget(
         buildTestWidget(

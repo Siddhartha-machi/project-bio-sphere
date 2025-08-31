@@ -195,11 +195,15 @@ class CoreThemeBuilder {
       ),
 
       errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: scheme.error, width: 1.5),
+        borderSide: BorderSide(color: scheme.error, width: 1),
         borderRadius: borderRadius,
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey, width: 1),
+        borderRadius: borderRadius,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: scheme.primary, width: 1),
         borderRadius: borderRadius,
       ),
       isDense: true,
@@ -225,16 +229,30 @@ class CoreThemeBuilder {
       inputDecorationTheme: _buildInputDecoration(colorScheme, txtTheme),
 
       cardTheme: CardThemeData(
-        elevation: 4,
+        elevation: 2,
+        margin: EdgeInsets.symmetric(horizontal: 6.sp),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius * 1.5),
+          side: BorderSide(color: colorScheme.onSurface.withAlpha(20)),
         ),
-        margin: const EdgeInsets.all(0),
       ),
 
       /// Ripple styles
       splashColor: colorScheme.primary.withAlpha(25),
       highlightColor: colorScheme.primary.withAlpha(25),
+
+      /// Slider styles
+      sliderTheme: SliderThemeData(
+        showValueIndicator: ShowValueIndicator.onDrag,
+        // Tooltip (value indicator) styling
+        valueIndicatorColor: colorScheme.primary,
+
+        valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
+        valueIndicatorTextStyle: txtTheme.labelSmall!.copyWith(
+          color: colorScheme.onPrimary,
+        ),
+        rangeThumbShape: RoundRangeSliderThumbShape(enabledThumbRadius: 7.sp),
+      ),
 
       /// Button styles
       filledButtonTheme: FilledButtonThemeData(
