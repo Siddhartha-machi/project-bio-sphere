@@ -17,7 +17,7 @@ dependencies:
   equatable: ^2.0.5        # Value equality for entities/value objects
 
   # State management (choose one or more as needed)
-  flutter_bloc: ^8.1.4     # Bloc pattern
+  flutter_riverpod: ^2.6.1
 
   # Networking
   dio: ^5.4.3 # HTTP client
@@ -26,6 +26,8 @@ dependencies:
   hive: ^2.2.3 # Lightweight DB
   hive_flutter: ^1.1.0 # Hive for Flutter
   shared_preferences: ^2.5.3
+  connectivity_plus: ^6.1.5
+  flutter_secure_storage: ^9.2.4
   file_picker: ^10.2.4
 
   # JSON serialization
@@ -34,6 +36,7 @@ dependencies:
   # Theme
   json_theme: ^8.0.0+2
   google_fonts: ^6.2.0
+  material_color_utilities: ^0.11.1
 
   # Icons
   icons_plus: ^5.0.0
