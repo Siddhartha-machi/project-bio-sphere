@@ -13,7 +13,7 @@ part 'chart_models.g.dart';
 ///   { label: 'Jan', value: 80.0,  group: 'Cost' }
 @immutable
 @JsonSerializable()
-class ChartData implements APIDataModel {
+class ChartData extends APIDataModel {
   /// X-axis bucket (category/period), e.g. "Jan", "2025-01-01", "Q1".
   final String label;
 
@@ -24,6 +24,7 @@ class ChartData implements APIDataModel {
   final String group;
 
   const ChartData({
+    required super.id,
     required this.label,
     required this.value,
     required this.group,
@@ -38,6 +39,7 @@ class ChartData implements APIDataModel {
 
   ChartData copyWith({String? label, double? value, String? group}) {
     return ChartData(
+      id: id,
       label: label ?? this.label,
       value: value ?? this.value,
       group: group ?? this.group,

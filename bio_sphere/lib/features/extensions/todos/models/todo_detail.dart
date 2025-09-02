@@ -2,14 +2,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:bio_sphere/models/data/comment.dart';
 import 'package:bio_sphere/models/data/attachment.dart';
-import 'package:bio_sphere/models/interfaces/api_data_model.dart';
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/features/extensions/todos/models/todo.dart';
 import 'package:bio_sphere/features/extensions/todos/models/todo_step.dart';
 
 part 'todo_detail.g.dart';
 
 @JsonSerializable()
-class TodoDetail extends APIDataModel {
+class TodoDetail extends IDataModel {
   const TodoDetail({
     this.tags,
     this.notes,
@@ -19,6 +19,7 @@ class TodoDetail extends APIDataModel {
     this.assignedTo,
     this.attachments,
     this.completedAt,
+    required super.id,
     required this.info,
     this.steps = const [],
     this.recurrencePattern,

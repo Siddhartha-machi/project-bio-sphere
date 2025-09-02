@@ -1,20 +1,19 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:bio_sphere/models/interfaces/api_data_model.dart';
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 
 part 'attachment.g.dart';
 
 @JsonSerializable()
-class Attachment implements APIDataModel {
+class Attachment extends IDataModel {
   const Attachment({
-    required this.id,
+    required super.id,
     required this.url,
     required this.name,
     required this.size,
     required this.uploadDate,
   });
 
-  final String id;
   final String url;
   final String name;
   final double size;

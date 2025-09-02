@@ -1,13 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:bio_sphere/models/interfaces/api_data_model.dart';
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/features/auth/constants/auth_enums.dart';
 import 'package:bio_sphere/features/auth/data/models/local_repo_config.dart';
 
 part 'user_preferences.g.dart';
 
 @JsonSerializable()
-class UserPreferences extends APIDataModel {
+class UserPreferences extends IDataModel {
   final Theme themeMode;
   final SaveMode savemode;
   final bool allowDataShare;
@@ -16,6 +16,7 @@ class UserPreferences extends APIDataModel {
   final LocalRepoConfig? localRepoConfig;
 
   const UserPreferences({
+    required super.id,
     this.localRepoConfig,
     this.allowDataShare = false,
     this.themeMode = Theme.system,

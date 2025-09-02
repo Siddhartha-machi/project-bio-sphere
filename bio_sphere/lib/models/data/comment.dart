@@ -1,14 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:bio_sphere/features/auth/data/models/user.dart';
-import 'package:bio_sphere/models/interfaces/api_data_model.dart';
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 
 part 'comment.g.dart';
 
 @JsonSerializable()
-class Comment extends APIDataModel {
+class Comment extends IDataModel {
   Comment({
-    required this.id,
+    required super.id,
     required this.postId,
     required this.content,
     required this.createdBy,
@@ -24,7 +24,6 @@ class Comment extends APIDataModel {
     this.parentAuthor,
   });
 
-  final String id;
   final User createdBy;
   final String? postId;
   final bool isEdited;

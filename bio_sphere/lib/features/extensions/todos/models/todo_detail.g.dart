@@ -21,6 +21,7 @@ TodoDetail _$TodoDetailFromJson(Map<String, dynamic> json) => TodoDetail(
       completedAt: json['completedAt'] == null
           ? null
           : DateTime.parse(json['completedAt'] as String),
+      id: json['id'] as String,
       info: TodoDetail._todoFromJson(json['info'] as Map<String, dynamic>),
       steps: json['steps'] == null
           ? const []
@@ -34,6 +35,7 @@ TodoDetail _$TodoDetailFromJson(Map<String, dynamic> json) => TodoDetail(
 
 Map<String, dynamic> _$TodoDetailToJson(TodoDetail instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'updatedAt': instance.updatedAt.toIso8601String(),
       'createdBy': instance.createdBy,

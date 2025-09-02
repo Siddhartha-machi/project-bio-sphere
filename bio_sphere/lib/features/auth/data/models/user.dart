@@ -1,14 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:bio_sphere/models/interfaces/api_data_model.dart';
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/features/auth/constants/auth_enums.dart';
 import 'package:bio_sphere/features/auth/data/models/user_preferences.dart';
 
 part 'user.g.dart';
 
 @JsonSerializable()
-class User extends APIDataModel {
-  final String id;
+class User extends IDataModel {
   final Role role;
   final String email;
   final String firstName;
@@ -24,7 +23,7 @@ class User extends APIDataModel {
   final UserPreferences preferences;
 
   User({
-    required this.id,
+    required super.id,
     required this.email,
     required this.firstName,
     required this.lastName,
@@ -35,7 +34,7 @@ class User extends APIDataModel {
     this.password,
     this.profilePictureURL,
     this.bio,
-  }) : preferences = const UserPreferences();
+  }) : preferences = UserPreferences(id: id);
 
   // Auto-generated methods
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

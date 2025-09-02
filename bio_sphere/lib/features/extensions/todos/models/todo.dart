@@ -1,12 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:bio_sphere/models/interfaces/api_data_model.dart';
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 
 part 'todo.g.dart';
 
 @JsonSerializable()
-class Todo extends APIDataModel {
-  final String id;
+class Todo extends IDataModel {
   final String title;
   final int priority;
   final bool isCompleted;
@@ -17,7 +16,7 @@ class Todo extends APIDataModel {
   const Todo({
     this.dueDate,
     this.description,
-    required this.id,
+    required super.id,
     this.priority = 1,
     required this.title,
     this.isCompleted = false,

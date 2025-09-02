@@ -8,6 +8,7 @@ part of 'user_preferences.dart';
 
 UserPreferences _$UserPreferencesFromJson(Map<String, dynamic> json) =>
     UserPreferences(
+      id: json['id'] as String,
       localRepoConfig: json['localRepoConfig'] == null
           ? null
           : LocalRepoConfig.fromJson(
@@ -22,6 +23,7 @@ UserPreferences _$UserPreferencesFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UserPreferencesToJson(UserPreferences instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'themeMode': _$ThemeEnumMap[instance.themeMode]!,
       'savemode': _$SaveModeEnumMap[instance.savemode]!,
       'allowDataShare': instance.allowDataShare,
