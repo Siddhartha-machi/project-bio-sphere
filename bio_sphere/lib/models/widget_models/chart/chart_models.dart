@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:bio_sphere/models/interfaces/api_data_model.dart';
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/shared/constants/widget/widget_enums.dart';
 
 part 'chart_models.g.dart';
@@ -13,7 +13,7 @@ part 'chart_models.g.dart';
 ///   { label: 'Jan', value: 80.0,  group: 'Cost' }
 @immutable
 @JsonSerializable()
-class ChartData extends APIDataModel {
+class ChartData extends IDataModel {
   /// X-axis bucket (category/period), e.g. "Jan", "2025-01-01", "Q1".
   final String label;
 
