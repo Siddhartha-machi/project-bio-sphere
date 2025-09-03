@@ -15,12 +15,6 @@ class AppProviders {
   static const bloc = 'bloc';
 }
 
-class BackEnds {
-  static const cursor = 'cursor';
-  static const api = 'api_offset';
-  static const localDB = 'local_db';
-}
-
 class AppErrorCodes {
   static const transformErr = 999;
 }
