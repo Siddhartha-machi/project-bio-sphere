@@ -27,5 +27,5 @@ class Todo extends IDataModel {
   factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$TodoToJson(this);
+  Map<String, dynamic> toJson() => _$TodoToJson(this);
 }

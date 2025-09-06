@@ -20,5 +20,5 @@ class TodoStep extends IDataModel {
       _$TodoStepFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$TodoStepToJson(this);
+  Map<String, dynamic> toJson() => _$TodoStepToJson(this);
 }

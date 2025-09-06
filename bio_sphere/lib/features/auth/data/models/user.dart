@@ -40,5 +40,5 @@ class User extends IDataModel {
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$UserToJson(this);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }

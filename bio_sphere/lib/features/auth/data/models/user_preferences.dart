@@ -29,5 +29,5 @@ class UserPreferences extends IDataModel {
       _$UserPreferencesFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$UserPreferencesToJson(this);
+  Map<String, dynamic> toJson() => _$UserPreferencesToJson(this);
 }

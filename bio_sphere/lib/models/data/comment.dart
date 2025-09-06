@@ -43,5 +43,5 @@ class Comment extends IDataModel {
       _$CommentFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$CommentToJson(this);
+  Map<String, dynamic> toJson() => _$CommentToJson(this);
 }

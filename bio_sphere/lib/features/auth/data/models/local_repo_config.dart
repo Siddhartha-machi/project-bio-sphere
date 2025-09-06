@@ -21,5 +21,5 @@ class LocalRepoConfig extends IDataModel {
       _$LocalRepoConfigFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$LocalRepoConfigToJson(this);
+  Map<String, dynamic> toJson() => _$LocalRepoConfigToJson(this);
 }

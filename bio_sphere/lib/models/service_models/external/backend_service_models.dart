@@ -6,9 +6,9 @@
 |------------------------------|
 */
 
-class BackendResponse {
+class BackendResponse<T> {
   /// Raw data (JSON map, Firestore snapshot, SQL rows, etc.)
-  final dynamic rawData;
+  final T? rawData;
 
   /// Whether the request succeeded.
   final bool isSuccess;
@@ -27,10 +27,7 @@ class BackendResponse {
   });
 
   /// Successful response with raw data.
-  factory BackendResponse.success(
-    dynamic rawData, {
-    BackendPagination? pagination,
-  }) {
+  factory BackendResponse.success(T? rawData, {BackendPagination? pagination}) {
     return BackendResponse(
       isSuccess: true,
       rawData: rawData,

@@ -35,7 +35,7 @@ class ChartData extends IDataModel {
       _$ChartDataFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$ChartDataToJson(this);
+  Map<String, dynamic> toJson() => _$ChartDataToJson(this);
 
   ChartData copyWith({String? label, double? value, String? group}) {
     return ChartData(

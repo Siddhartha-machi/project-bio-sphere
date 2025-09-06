@@ -50,7 +50,7 @@ class TodoDetail extends IDataModel {
       _$TodoDetailFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$TodoDetailToJson(this);
+  Map<String, dynamic> toJson() => _$TodoDetailToJson(this);
 
   // Custom deserialization function for `Todo`
   static Todo _todoFromJson(Map<String, dynamic> json) {
@@ -58,7 +58,7 @@ class TodoDetail extends IDataModel {
   }
 
   static Map<String, dynamic> _todoToJson(Todo todo) {
-    return todo.toJson;
+    return todo.toJson();
   }
 
   // Custom deserialization function for `Todo`
@@ -67,6 +67,6 @@ class TodoDetail extends IDataModel {
   }
 
   static List<Map<String, dynamic>> _todoStepToJson(List<TodoStep> steps) {
-    return steps.map((step) => step.toJson).toList();
+    return steps.map((step) => step.toJson()).toList();
   }
 }

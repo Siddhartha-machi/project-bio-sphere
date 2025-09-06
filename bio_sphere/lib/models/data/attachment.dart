@@ -1,9 +1,11 @@
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 
 part 'attachment.g.dart';
 
+@collection
 @JsonSerializable()
 class Attachment extends IDataModel {
   const Attachment({
@@ -24,5 +26,5 @@ class Attachment extends IDataModel {
       _$AttachmentFromJson(json);
 
   @override
-  Map<String, dynamic> get toJson => _$AttachmentToJson(this);
+  Map<String, dynamic> toJson() => _$AttachmentToJson(this);
 }
