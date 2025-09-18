@@ -16,18 +16,21 @@ UserPreferences _$UserPreferencesFromJson(Map<String, dynamic> json) =>
       allowDataShare: json['allowDataShare'] as bool? ?? false,
       themeMode: $enumDecodeNullable(_$ThemeEnumMap, json['themeMode']) ??
           Theme.system,
-      savemode: $enumDecodeNullable(_$SaveModeEnumMap, json['savemode']) ??
-          SaveMode.remote,
       notificationsEnabled: json['notificationsEnabled'] as bool? ?? false,
+      backendOrder: (json['backendOrder'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$BackendEnumMap, e))
+              .toList() ??
+          const [Backend.api, Backend.fallbackBAAS],
     );
 
 Map<String, dynamic> _$UserPreferencesToJson(UserPreferences instance) =>
     <String, dynamic>{
       'id': instance.id,
       'themeMode': _$ThemeEnumMap[instance.themeMode]!,
-      'savemode': _$SaveModeEnumMap[instance.savemode]!,
       'allowDataShare': instance.allowDataShare,
       'notificationsEnabled': instance.notificationsEnabled,
+      'backendOrder':
+          instance.backendOrder.map((e) => _$BackendEnumMap[e]!).toList(),
       'localRepoConfig': instance.localRepoConfig,
     };
 
@@ -37,8 +40,8 @@ const _$ThemeEnumMap = {
   Theme.system: 'system',
 };
 
-const _$SaveModeEnumMap = {
-  SaveMode.remote: 'remote',
-  SaveMode.local: 'local',
-  SaveMode.remoteAndLocal: 'remoteAndLocal',
+const _$BackendEnumMap = {
+  Backend.api: 'api',
+  Backend.localDB: 'localDB',
+  Backend.fallbackBAAS: 'fallbackBAAS',
 };

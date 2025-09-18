@@ -8,30 +8,25 @@ part of 'data_source_config.dart';
 
 DataSourceConfig _$DataSourceConfigFromJson(Map<String, dynamic> json) =>
     DataSourceConfig(
-      table: json['table'] as String?,
-      localDb: json['localDb'],
-      endpoint: json['endpoint'] as String?,
-      collection: json['collection'] as String?,
+      path: json['path'] as String? ?? '',
       id: json['id'] as String,
-      isCore: json['isCore'] as bool? ?? false,
       isActive: json['isActive'] as bool? ?? true,
-      backendType: $enumDecode(_$BackendEnumMap, json['backendType']),
+      backends: (json['backends'] as List<dynamic>?)
+              ?.map((e) => $enumDecode(_$BackendEnumMap, e))
+              .toList() ??
+          const [Backend.api, Backend.fallbackBAAS],
     );
 
 Map<String, dynamic> _$DataSourceConfigToJson(DataSourceConfig instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'isCore': instance.isCore,
+      'path': instance.path,
       'isActive': instance.isActive,
-      'backendType': _$BackendEnumMap[instance.backendType]!,
-      'table': instance.table,
-      'endpoint': instance.endpoint,
-      'localDb': instance.localDb,
-      'collection': instance.collection,
+      'backends': instance.backends.map((e) => _$BackendEnumMap[e]!).toList(),
     };
 
 const _$BackendEnumMap = {
   Backend.api: 'api',
   Backend.localDB: 'localDB',
-  Backend.firebase: 'firebase',
+  Backend.fallbackBAAS: 'fallbackBAAS',
 };

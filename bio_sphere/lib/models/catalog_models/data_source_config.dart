@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:bio_sphere/types/callback_typedefs.dart';
 import 'package:bio_sphere/constants/catalog_constants.dart';
 import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 
@@ -8,25 +9,18 @@ part 'data_source_config.g.dart';
 /// Represents one service entry fetched from API
 @JsonSerializable()
 class DataSourceConfig extends IDataModel {
-  final bool isCore;
+  final String path;
   final bool isActive;
-  final Backend backendType;
-
-  // Flexible fields depending on backend
-  final String? table;
-  final String? endpoint;
-  final dynamic localDb; // Placeholder, adapt for your DB
-  final String? collection;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final FromJson? transformer;
+  final List<Backend> backends;
 
   DataSourceConfig({
-    this.table,
-    this.localDb,
-    this.endpoint,
-    this.collection,
+    this.path = '',
+    this.transformer,
     required super.id,
-    this.isCore = false,
     this.isActive = true,
-    required this.backendType,
+    this.backends = const [Backend.api],
   });
 
   // Auto-generated methods
@@ -35,4 +29,13 @@ class DataSourceConfig extends IDataModel {
 
   @override
   Map<String, dynamic> toJson() => _$DataSourceConfigToJson(this);
+
+  DataSourceConfig copyWith(FromJson? transformer) {
+    return DataSourceConfig(
+      id: id,
+      path: path,
+      isActive: isActive,
+      transformer: transformer,
+    );
+  }
 }

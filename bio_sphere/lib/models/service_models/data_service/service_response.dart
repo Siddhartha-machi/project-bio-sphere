@@ -30,14 +30,14 @@ class ServiceResponse<T> {
     Map<String, dynamic>? meta,
     PaginationContext? pagination,
   }) {
-    return ServiceResponse(data: data, meta: meta, pagination: pagination);
+    return ServiceResponse<T>(data: data, meta: meta, pagination: pagination);
   }
 
   factory ServiceResponse.error(
     ServiceError error, {
     Map<String, dynamic>? meta,
   }) {
-    return ServiceResponse(error: error, meta: meta);
+    return ServiceResponse<T>(error: error, meta: meta);
   }
 
   bool get isSuccess => data != null && error == null;

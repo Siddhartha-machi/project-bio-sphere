@@ -29,7 +29,10 @@ class AppLogger {
   Future<void> info(String message) => log(message, level: LogLevel.info);
   Future<void> debug(String message) => log(message, level: LogLevel.debug);
   Future<void> warning(String message) => log(message, level: LogLevel.warning);
-  Future<void> error(String message) => log(message, level: LogLevel.error);
+  Future<void> error(String message, [dynamic err, dynamic st]) {
+    /// TODO: Use error and stack trace objects
+    return log(message, level: LogLevel.error);
+  }
 
   String _attachTimeStamp(String message) {
     final now = DateTime.now();
