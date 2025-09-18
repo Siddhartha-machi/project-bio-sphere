@@ -1,3 +1,4 @@
+import 'package:bio_sphere/types/callback_typedefs.dart';
 import 'package:bio_sphere/constants/catalog_constants.dart';
 import 'package:bio_sphere/services/external/api_service.dart';
 import 'package:bio_sphere/models/interfaces/i_data_model.dart';
@@ -13,40 +14,43 @@ import 'package:bio_sphere/models/service_models/external/backend_service_models
 class GenericAPIDataSource<T extends IDataModel> implements IDataSource<T> {
   final String endPoint;
   final ApiService _service;
-  final T Function(Map<String, dynamic> json) fromJson;
+  final FromJson<T> fromJson;
 
   GenericAPIDataSource(this.endPoint, this.fromJson)
     : _service = ApiService(endPoint);
 
-  ServiceResponse _resolveRequest(BackendResponse response) {
+  ServiceResponse<R> _resolveRequest<R>(BackendResponse response) {
     try {
       if (response.isSuccess) {
-        dynamic transformedData;
+        R? transformedData;
 
         if (response.rawData == null) {
-          /// Incase of delete, there would no data
+          // In case of delete, there would be no data
           transformedData = null;
         } else if (response.rawData is List) {
-          transformedData = (response.rawData as List<Map<String, dynamic>>)
-              .map(fromJson)
-              .toList();
+          transformedData =
+              (response.rawData as List)
+                      .cast<Map<String, dynamic>>()
+                      .map(fromJson)
+                      .toList()
+                  as R;
         } else {
-          transformedData = fromJson(response.rawData);
+          transformedData = fromJson(response.rawData) as R;
         }
 
-        /// Transform backend data and pagination data to service response
-        return ServiceResponse.success(
-          transformedData,
+        // Explicitly return typed ServiceResponse<R>
+        return ServiceResponse<R>.success(
+          transformedData as R,
           pagination: PaginationMapper.mapTo(Backend.api, response),
         );
       } else {
-        return ServiceResponse.error(ErrorMapper.mapAPIError(response));
+        return ServiceResponse<R>.error(ErrorMapper.mapAPIError(response));
       }
     } catch (e) {
-      return ServiceResponse.error(
+      return ServiceResponse<R>.error(
         ServiceError(
           raw: e,
-          code: AppErrorCodes.transformErr,
+          code: AppErrorCodes.data.codeErr,
           message: 'Failed to transform data.',
         ),
       );
@@ -55,9 +59,11 @@ class GenericAPIDataSource<T extends IDataModel> implements IDataSource<T> {
 
   @override
   Future<ServiceResponse<T>> getItem(ServiceRequest request) async {
-    final response = await _service.request(path: request.item!.id);
+    final id = request.filters!['id'];
 
-    return _resolveRequest(response) as ServiceResponse<T>;
+    final response = await _service.request(path: '/$id');
+
+    return _resolveRequest<T>(response);
   }
 
   @override
@@ -65,7 +71,7 @@ class GenericAPIDataSource<T extends IDataModel> implements IDataSource<T> {
     /// TODO add other filters
     final response = await _service.request(queryParams: request.filters);
 
-    return _resolveRequest(response) as ServiceResponse<List<T>>;
+    return _resolveRequest<List<T>>(response);
   }
 
   @override
