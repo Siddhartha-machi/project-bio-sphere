@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:bio_sphere/shared/utils/style.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
 import 'package:bio_sphere/shared/constants/widget/text_widget_enums.dart';
 
@@ -36,6 +37,8 @@ class BottomSheets {
     required WidgetBuilder builder,
     double maxHeightFactor = 0.95,
   }) {
+    final radius = Style.themeBorderRadius(context);
+
     return showModalBottomSheet<T>(
       context: context,
       useSafeArea: true,
@@ -45,33 +48,26 @@ class BottomSheets {
         final mq = MediaQuery.of(ctx);
         final maxHeight = mq.size.height * maxHeightFactor;
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return Container(
-              constraints: BoxConstraints(maxHeight: maxHeight),
-              decoration: BoxDecoration(
-                color: Theme.of(ctx).canvasColor,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Sticky header
-                  _buildModelHeader(ctx, title),
-                  // Body (scrollable if needed)
-                  Flexible(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.only(bottom: mq.viewInsets.bottom),
-                      child: Builder(builder: builder),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
+        return Container(
+          constraints: BoxConstraints(maxHeight: maxHeight),
+          decoration: BoxDecoration(
+            color: Theme.of(ctx).canvasColor,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Sticky header
+              _buildModelHeader(ctx, title),
+              // Body (scrollable if needed)
+              builder(ctx),
+              // SingleChildScrollView(
+              //   padding: EdgeInsets.only(bottom: mq.viewInsets.bottom),
+              //   child: 
+              // ),
+            ],
+          ),
         );
       },
     );
@@ -90,6 +86,8 @@ class BottomSheets {
     required Widget Function(BuildContext, ScrollController) builder,
     EdgeInsetsGeometry cMargin = const EdgeInsets.fromLTRB(12, 0, 12, 32),
   }) {
+    final radius = Style.themeBorderRadius(context);
+
     return showModalBottomSheet<T>(
       context: context,
       useSafeArea: true,
@@ -105,7 +103,10 @@ class BottomSheets {
             return Container(
               margin: cMargin,
               padding: cPadding,
-              color: Theme.of(context).canvasColor,
+              decoration: BoxDecoration(
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.circular(radius),
+              ),
               child: Column(
                 spacing: 18.0,
                 children: [
