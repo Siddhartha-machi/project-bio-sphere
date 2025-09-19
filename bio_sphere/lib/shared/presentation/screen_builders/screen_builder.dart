@@ -26,6 +26,7 @@ class ScreenBuilder extends StatelessWidget {
   final List<String>? paths;
   final VoidCallback? onAddPressed;
   final List<Widget> appBarActions;
+  final (double, double, double, double) padding;
   final void Function(BuildContext)? onHomePressed;
 
   /// Creates a [ScreenBuilder] widget.
@@ -37,6 +38,7 @@ class ScreenBuilder extends StatelessWidget {
     required this.title,
     required this.child,
     this.appBarActions = const [],
+    this.padding = (12, 12, 12, 12),
   });
 
   /// Builds the title section with optional breadcrumbs.
@@ -58,19 +60,22 @@ class ScreenBuilder extends StatelessWidget {
   /// Returns a gradient decoration for the app bar background.
   Decoration _gradientDecoration(BuildContext context) {
     final theme = Theme.of(context);
+    final primary = theme.primaryColor;
     final adapterFun = theme.brightness == Brightness.light
         ? Style.lighter
         : Style.darken;
 
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [
-          adapterFun(theme.primaryColor),
-          theme.primaryColor,
-          adapterFun(theme.primaryColor),
-        ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
+        colors: [
+          primary,
+          primary,
+          adapterFun(primary, 0.5),
+          adapterFun(primary, 0.8),
+        ],
+        stops: const [0.0, 0.2, 0.6, 1.0],
       ),
     );
   }
@@ -94,13 +99,13 @@ class ScreenBuilder extends StatelessWidget {
       actions: appBarActions,
       title: _buildTitle(context),
       toolbarHeight: kToolbarHeight + 12.sp,
+      backgroundColor: Colors.transparent,
       leading: GenericIconButton(
         type: ButtonType.text,
         variant: ButtonVariant.secondary,
         icon: Icons.arrow_back_ios_new_sharp,
         onPressed: () => _onHomePressed(context),
       ),
-      flexibleSpace: Container(decoration: _gradientDecoration(context)),
     );
   }
 
@@ -115,10 +120,23 @@ class ScreenBuilder extends StatelessWidget {
   /// Builds the main scaffold for the screen.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: child,
-      appBar: _appBar(context),
-      floatingActionButton: _buildFAB(),
+    return Container(
+      decoration: _gradientDecoration(context),
+
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(
+            padding.$1.sp,
+            padding.$2.sp,
+            padding.$3.sp,
+            padding.$4.sp,
+          ),
+          child: child,
+        ),
+        appBar: _appBar(context),
+        floatingActionButton: _buildFAB(),
+        backgroundColor: Colors.transparent,
+      ),
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:bio_sphere/features/extensions/todos/root.dart';
 import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
+import 'package:bio_sphere/shared/presentation/components/ui_chip.dart';
 import 'package:bio_sphere/shared/constants/widget/text_widget_enums.dart';
 import 'package:bio_sphere/models/widget_models/generic_field_config.dart';
 import 'package:bio_sphere/shared/utils/form/generic_field_controller.dart';
