@@ -1,6 +1,7 @@
 name: bio_sphere
 description: "Bio sphere app"
 publish_to: 'none'
+version: 1.0.0
 
 environment:
   sdk: ^3.8.1
@@ -16,28 +17,43 @@ dependencies:
   equatable: ^2.0.5        # Value equality for entities/value objects
 
   # State management (choose one or more as needed)
-  flutter_bloc: ^8.1.4     # Bloc pattern
+  flutter_riverpod: ^2.6.1
 
   # Networking
-  dio: ^5.4.3              # HTTP client
+  dio: ^5.4.3 # HTTP client
 
   # Data persistence
-  hive: ^2.2.3             # Lightweight DB
-  hive_flutter: ^1.1.0     # Hive for Flutter
+  isar: ^3.1.0+1
+  path_provider: ^2.1.5
+  isar_flutter_libs: ^3.1.0+1
+
   shared_preferences: ^2.5.3
+  connectivity_plus: ^7.0.0
+  flutter_secure_storage: ^9.2.4
+  file_picker: ^10.2.4
 
   # JSON serialization
   json_annotation: ^4.9.0
 
   # Theme
   json_theme: ^8.0.0+2
+  google_fonts: ^6.2.0
+  material_color_utilities: ^0.11.1
+
+  # Icons
+  icons_plus: ^5.0.0
 
   # Misc
+  fl_chart: ^1.0.0
   flutter_dotenv: ^5.2.1
+  flutter_screenutil: ^5.9.3
 
   # Navigation
-  go_router: ^15.2.3
-  
+  go_router: ^16.0.0
+
+  # Formatters
+  intl: ^0.20.2
+  form_builder_validators: ^11.2.0
 
 dev_dependencies:
   flutter_test:
@@ -46,9 +62,9 @@ dev_dependencies:
 
   # Code generation
   build_runner: ^2.4.9
-  injectable_generator: ^2.6.1
+  injectable_generator: ^2.4.1
   json_serializable: ^6.8.0
-  hive_generator: ^2.0.1
+  isar_generator: ^3.1.0+1
 
   # Logging
   logger: ^2.5.0
