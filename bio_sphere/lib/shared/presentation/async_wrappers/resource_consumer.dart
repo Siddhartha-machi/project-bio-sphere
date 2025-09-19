@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bio_sphere/state/notifier_root.dart';
 import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/state/state_defs/resource_state.dart';
+import 'package:bio_sphere/shared/presentation/text/text_ui.dart';
 import 'package:bio_sphere/state/notifiers/resource_notifier.dart';
 import 'package:bio_sphere/shared/presentation/ui_feedback/loaders.dart';
 import 'package:bio_sphere/state/notifiers/resource_registry_notifier.dart';
@@ -19,7 +20,11 @@ class ResourceConsumer<T extends IDataModel> extends ConsumerStatefulWidget {
   final FutureOr<void> Function(WidgetRef ref, ResourceNotifier<T> notifier)?
   onInit;
 
-  const ResourceConsumer({super.key, this.onInit, required this.builder});
+  const ResourceConsumer({super.key, this.onInit, required this.builder})
+    : assert(
+        T != IDataModel,
+        'A model type that extends IDataModel must be provided.',
+      );
 
   @override
   ConsumerState<ResourceConsumer<T>> createState() =>
@@ -58,7 +63,15 @@ class _ResourceConsumerState<T extends IDataModel>
     final notifier = ref.read(_provider.notifier);
 
     if (state.isLoading) {
-      return Loaders.appLoader(size: 40, Theme.of(context).primaryColor);
+      return Column(
+        spacing: 12,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Loaders.appLoader(size: 40, Theme.of(context).colorScheme.primary),
+          TextUI('Loading $T data...', color: Theme.of(context).primaryColor),
+        ],
+      );
     } else if (state.error != null) {
       return ErrorFallback(message: state.error!);
     } else if (state.list?.isNotEmpty == true || state.data != null) {

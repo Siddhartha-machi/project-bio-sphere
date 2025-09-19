@@ -41,7 +41,9 @@ class GenericAPIDataSource<T extends IDataModel> implements IDataSource<T> {
         // Explicitly return typed ServiceResponse<R>
         return ServiceResponse<R>.success(
           transformedData as R,
-          pagination: PaginationMapper.mapTo(Backend.api, response),
+
+          /// Disabled pagination
+          // pagination: PaginationMapper.mapTo(Backend.api, response),
         );
       } else {
         return ServiceResponse<R>.error(ErrorMapper.mapAPIError(response));
