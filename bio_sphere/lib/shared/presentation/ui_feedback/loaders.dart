@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Loaders {
-  static Widget spinner(Color color, {double width = 2}) {
-    return CircularProgressIndicator(
-      valueColor: AlwaysStoppedAnimation<Color>(color),
-      strokeWidth: width,
+  static Widget spinner(Color color, {double width = 3, double size = 20}) {
+    return SizedBox.square(
+      dimension: size,
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(color),
+        strokeWidth: width,
+      ),
     );
   }
 

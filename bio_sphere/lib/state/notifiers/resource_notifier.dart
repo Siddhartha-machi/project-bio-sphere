@@ -10,13 +10,11 @@ import 'package:bio_sphere/models/service_models/data_service/service_request.da
 typedef _BaseNotifier<T> = StateNotifier<ResourceState<T>>;
 
 /// --- Resource Notifier ---
-/// TODO 1: add auto fetch factory constructors
-/// TODO 2: mark data stale after N minutes and fetch again.
 class ResourceNotifier<T extends IDataModel> extends _BaseNotifier<T> {
   final AppLogger logger;
   final DataSourceCatalog catalog;
 
-  ResourceNotifier({String? id, required this.catalog, required this.logger})
+  ResourceNotifier({required this.catalog, required this.logger})
     : super(ResourceState<T>());
 
   /// Helper to resolve a service
@@ -33,7 +31,7 @@ class ResourceNotifier<T extends IDataModel> extends _BaseNotifier<T> {
   /// --- CRUD METHODS ---
   Future<void> fetchById(String id, {bool force = false}) async {
     /// Only fetch if no cached item
-    if (!force && state.data?.id == id) return;
+    if (!force && state.data?.id == id && !state.isStale()) return;
 
     state = state.copyWith(isLoading: true, error: null);
     try {
@@ -59,7 +57,7 @@ class ResourceNotifier<T extends IDataModel> extends _BaseNotifier<T> {
 
   Future<void> fetchList([ServiceRequest? request, bool force = false]) async {
     /// Only fetch if no cached list
-    if (!force && (state.list?.isNotEmpty ?? false)) return;
+    if (!force && (state.list?.isNotEmpty ?? false) && !state.isStale()) return;
 
     state = state.copyWith(isLoading: true, error: null);
     try {
