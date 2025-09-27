@@ -10,6 +10,7 @@ import 'package:bio_sphere/models/service_models/data_service/service_request.da
 typedef _BaseNotifier<T> = StateNotifier<ResourceState<T>>;
 
 /// --- Resource Notifier ---
+/// TODO 1 : handle concurrent calls.
 class ResourceNotifier<T extends IDataModel> extends _BaseNotifier<T> {
   final AppLogger logger;
   final DataSourceCatalog catalog;

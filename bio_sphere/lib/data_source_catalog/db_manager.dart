@@ -2,50 +2,47 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DbManager {
-  static Isar? _isar;
-  static final List<CollectionSchema> _schemas = [];
+  final _instances = <String, Isar>{};
+  final Map<String, List<CollectionSchema>> moduleSchemas;
 
-  /// Open Isar with core schemas.
-  static Future<void> init({
-    List<CollectionSchema> coreSchemas = const [],
-  }) async {
-    if (_isar != null) return; // already initialized
+  DbManager(this.moduleSchemas);
+
+  /// Open Isar with module schemas.
+  Future<Isar> getModule(String moduleName) async {
+    if (_instances.containsKey(moduleName)) return _instances[moduleName]!;
+
+    final schemas = moduleSchemas[moduleName];
+
+    if (schemas == null) {
+      throw Exception("Module $moduleName not registered");
+    }
 
     final dir = await getApplicationDocumentsDirectory();
+    final isar = await Isar.open(
+      schemas,
+      name: moduleName,
+      directory: dir.path,
+    );
 
-    _schemas.addAll(coreSchemas);
+    _instances[moduleName] = isar;
 
-    _isar = await Isar.open(_schemas, directory: dir.path);
-  }
-
-  /// Register new schemas (e.g. for extensions).
-  /// Note: Isar does NOT allow opening the same DB twice with different schemas,
-  /// so this should be called **before** any queries.
-  static Future<void> registerSchemas(List<CollectionSchema> newSchemas) async {
-    if (_isar != null) {
-      throw StateError(
-        "Isar is already open. Register schemas before calling init().",
-      );
-    }
-    _schemas.addAll(newSchemas);
-  }
-
-  /// Accessor for global instance
-  static Isar get instance {
-    if (_isar == null) {
-      throw StateError(
-        "DbManager not initialized. Call DbManager.init() first.",
-      );
-    }
-    return _isar!;
+    return isar;
   }
 
   /// Close DB
-  static Future<void> close() async {
-    await _isar?.close();
+  Future<void> close(String moduleName) async {
+    final instance = _instances.remove(moduleName);
 
-    _isar = null;
+    if (instance != null && instance.isOpen) {
+      await instance.close();
+    }
+  }
 
-    _schemas.clear();
+  Future<void> closeAll() async {
+    for (final instance in _instances.values) {
+      if (instance.isOpen) await instance.close();
+    }
+
+    _instances.clear();
   }
 }

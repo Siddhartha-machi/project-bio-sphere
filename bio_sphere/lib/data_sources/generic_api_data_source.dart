@@ -1,23 +1,19 @@
 import 'package:bio_sphere/types/callback_typedefs.dart';
-import 'package:bio_sphere/constants/catalog_constants.dart';
 import 'package:bio_sphere/services/external/api_service.dart';
 import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/models/interfaces/i_data_source.dart';
 import 'package:bio_sphere/constants/api_service_constants.dart';
 import 'package:bio_sphere/services/service_utils/mappers/error_mapper.dart';
-import 'package:bio_sphere/services/service_utils/mappers/pagination_mapper.dart';
 import 'package:bio_sphere/models/service_models/data_service/service_response.dart';
 import 'package:bio_sphere/models/service_models/data_service/service_request.dart';
 import 'package:bio_sphere/models/service_models/external/backend_service_models.dart';
 
 /// Concrete API Data Source that uses ApiService.
 class GenericAPIDataSource<T extends IDataModel> implements IDataSource<T> {
-  final String endPoint;
   final ApiService _service;
   final FromJson<T> fromJson;
 
-  GenericAPIDataSource(this.endPoint, this.fromJson)
-    : _service = ApiService(endPoint);
+  const GenericAPIDataSource(this._service, this.fromJson);
 
   ServiceResponse<R> _resolveRequest<R>(BackendResponse response) {
     try {

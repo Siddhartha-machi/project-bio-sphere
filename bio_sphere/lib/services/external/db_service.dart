@@ -73,6 +73,20 @@ class DBService<T extends IDataModel> {
     }
   }
 
+  /// Update item by ID
+  Future<BackendResponse<void>> updateItem(T item) async {
+    try {
+      await _isar.writeTxn(() async {
+        await _collection.put(item);
+      });
+      return BackendResponse.success(null);
+    } catch (e) {
+      return BackendResponse.error(
+        BackendError(code: 'DB_UPDATE_FAILED', message: e.toString(), raw: e),
+      );
+    }
+  }
+
   /// Clear all items in the collection
   Future<BackendResponse<void>> clear() async {
     try {

@@ -6,28 +6,27 @@ import 'package:bio_sphere/data_source_catalog/data_sources_catalog.dart';
 import 'package:bio_sphere/data_source_catalog/model_mapper_registry.dart';
 
 class ConfigNotifier extends StateNotifier<CoreConfig> {
-  final AppLogger _logger;
+  late final AppLogger logger;
 
-  ConfigNotifier(ModelMapperRegistry registry, this._logger)
-    : super(CoreConfig(catalog: DataSourceCatalog(registry))) {
-    _logger.info('ConfigNotifier created');
+  ConfigNotifier(super._state) {
+    logger = AppLogger(tag: 'Config Provider');
   }
 
   /// Register a mapper (can be done anytime, even after init).
   void updateMapperRegistry(Function(ModelMapperRegistry) updateFn) {
-    _logger.debug('Registering mapper...');
+    logger.debug('Registering mapper...');
     updateFn(state.catalog.mapperRegistry);
   }
 
   /// Update feature flags without touching catalog.
   void updateFeatureFlags(Map<String, dynamic> flags) {
-    _logger.debug('Updating feature flags: $flags');
+    logger.debug('Updating feature flags: $flags');
     state = state.copyWith(featureFlags: {...state.featureFlags, ...flags});
   }
 
   /// Replace catalog (rarely needed, but possible).
   void replaceCatalog(DataSourceCatalog newCatalog) {
-    _logger.warning('Replacing catalog with new instance');
+    logger.warning('Replacing catalog with new instance');
     state = state.copyWith(catalog: newCatalog);
   }
 }
