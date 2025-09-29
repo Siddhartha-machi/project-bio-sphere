@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:async';
-
 import 'package:dio/dio.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
+import 'package:bio_sphere/services/external/i_external_service.dart';
 
 import 'package:bio_sphere/constants/api_service_constants.dart';
 import 'package:bio_sphere/services/external/secure_storage_service.dart';
@@ -25,7 +25,7 @@ import 'package:bio_sphere/services/service_utils/api_interceptors/connectivity_
 |------------------------------|
 */
 
-class ApiService {
+class ApiService<T extends IDataModel> extends IExternalService<T> {
   final String path;
   late final Dio _dio;
   final SecureStorageService _secureStorage = SecureStorageService();
@@ -33,7 +33,7 @@ class ApiService {
   ApiService(this.path) {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.example.com$path',
+        baseUrl: 'http://localhost:3000$path',
         responseType: ResponseType.json,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
@@ -43,25 +43,21 @@ class ApiService {
     _dio.interceptors.addAll([
       AuthInterceptor(_secureStorage), // Adds access token
       RefreshTokenInterceptor(_dio, _secureStorage), // Refresh expired tokens
-      ConnectivityInterceptor(Connectivity()), // Queue requests offline
+      ConnectivityInterceptor(), // Queue requests offline
       ErrorHandlerInterceptor(_secureStorage), // Handle server errors
       CustomLogInterceptor(), // Log requests/responses
     ]);
   }
 
   /// Core request method returning standardized BackendResponse
+  @override
   Future<BackendResponse> request({
-    dynamic data,
-    Options? options,
     String path = '',
-    Map<String, dynamic>? headers,
+    Map<String, dynamic>? data,
     String method = HttpMethod.get,
     Map<String, dynamic>? queryParams,
   }) async {
-    final requestOptions = (options ?? Options()).copyWith(
-      method: method,
-      headers: headers,
-    );
+    final requestOptions = Options(method: method);
 
     try {
       final response = await _dio.request(

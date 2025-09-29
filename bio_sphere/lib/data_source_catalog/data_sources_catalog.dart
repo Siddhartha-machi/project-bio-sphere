@@ -1,7 +1,7 @@
 import 'package:bio_sphere/constants/catalog_constants.dart';
 import 'package:bio_sphere/services/external/api_service.dart';
 import 'package:bio_sphere/models/interfaces/i_data_model.dart';
-import 'package:bio_sphere/data_sources/generic_data_source.dart';
+import 'package:bio_sphere/data_sources/generic_data_source_manager.dart';
 import 'package:bio_sphere/models/catalog_models/data_source_config.dart';
 import 'package:bio_sphere/data_source_catalog/model_mapper_registry.dart';
 
@@ -10,7 +10,7 @@ class DataSourceCatalog {
   final List<Backend> backendOrder;
   final ModelMapperRegistry mapperRegistry;
   final Map<String, DataSourceConfig> _configCatalog = {};
-  final Map<String, GenericDataSource> _dataSourceCache = {};
+  final Map<String, GenericDataSourceManager> _dataSourceCache = {};
 
   DataSourceCatalog(
     this.mapperRegistry, {
@@ -59,12 +59,13 @@ class DataSourceCatalog {
   }
 
   /// Public methods
-  Future<GenericDataSource<T>?> getService<T extends IDataModel>() async {
+  Future<GenericDataSourceManager<T>?>
+  getService<T extends IDataModel>() async {
     final id = T.toString();
 
     if (!_isInitialized) await _initAsync();
 
-    var oDataSrc = _dataSourceCache[id] as GenericDataSource<T>?;
+    var oDataSrc = _dataSourceCache[id] as GenericDataSourceManager<T>?;
 
     /// Cache miss
     if (oDataSrc == null) {
@@ -72,10 +73,7 @@ class DataSourceCatalog {
 
       /// Update cache
       if (config != null) {
-        oDataSrc = GenericDataSource(
-          config: config,
-          backendOrder: backendOrder,
-        );
+        oDataSrc = GenericDataSourceManager(config: config);
 
         _dataSourceCache[id] = oDataSrc;
       }

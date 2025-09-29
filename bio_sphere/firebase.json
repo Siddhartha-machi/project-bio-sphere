@@ -1,0 +1,35 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": { "default": { "projectId": "bio-sphere-aecc0", "appId": "1:65372686673:android:9c43a22a085aad28402b70", "fileOutput": "android/app/google-services.json" } },
+      "ios": {
+        "default": {
+          "projectId": "bio-sphere-aecc0",
+          "appId": "1:65372686673:ios:d39c09c6f2dedf6f402b70",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "bio-sphere-aecc0",
+          "appId": "1:65372686673:ios:d39c09c6f2dedf6f402b70",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "bio-sphere-aecc0",
+          "configurations": {
+            "android": "1:65372686673:android:9c43a22a085aad28402b70",
+            "ios": "1:65372686673:ios:d39c09c6f2dedf6f402b70",
+            "macos": "1:65372686673:ios:d39c09c6f2dedf6f402b70",
+            "web": "1:65372686673:web:b21bda25309d8951402b70",
+            "windows": "1:65372686673:web:c5f35eab9b31c9ac402b70"
+          }
+        }
+      }
+    }
+  }
+}
