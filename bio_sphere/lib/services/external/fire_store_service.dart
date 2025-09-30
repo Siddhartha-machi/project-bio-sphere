@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:bio_sphere/models/interfaces/i_data_model.dart';
-import 'package:bio_sphere/services/external/i_external_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/constants/api_service_constants.dart';
-import 'package:bio_sphere/services/service_utils/connectivity_manager.dart';
+import 'package:bio_sphere/services/external/i_external_service.dart';
 import 'package:bio_sphere/models/service_models/external/backend_service_models.dart';
 
 /* 
@@ -22,11 +21,8 @@ class FirestoreService<T extends IDataModel> extends IExternalService<T> {
   final String collectionPath;
 
   final FirebaseFirestore _db;
-  final ConnectivityManager _connectivityManager;
 
-  FirestoreService(this.collectionPath)
-    : _db = FirebaseFirestore.instance,
-      _connectivityManager = ConnectivityManager();
+  FirestoreService(this.collectionPath) : _db = FirebaseFirestore.instance;
 
   /// Central request method
   /// - method: use HttpMethod.get / post / put / delete
@@ -40,13 +36,6 @@ class FirestoreService<T extends IDataModel> extends IExternalService<T> {
     String method = HttpMethod.get,
     Map<String, dynamic>? queryParams,
   }) async {
-    /// Connectivity guard: short-circuit
-    // if (!_connectivityManager.isOnline) {
-    //   return BackendResponse.error(
-    //     BackendError(code: 'NO_NETWORK', message: 'No network connection'),
-    //   );
-    // }
-
     try {
       /// Route to the correct operation
       switch (method) {

@@ -11,7 +11,6 @@ import 'package:bio_sphere/services/service_utils/api_interceptors/auth_intercep
 import 'package:bio_sphere/services/service_utils/api_interceptors/error_interceptor.dart';
 import 'package:bio_sphere/services/service_utils/api_interceptors/logger_interceptor.dart';
 import 'package:bio_sphere/services/service_utils/api_interceptors/token_interceptors.dart';
-import 'package:bio_sphere/services/service_utils/api_interceptors/connectivity_interceptor.dart';
 
 /* 
 |------------------------------|
@@ -43,7 +42,6 @@ class ApiService<T extends IDataModel> extends IExternalService<T> {
     _dio.interceptors.addAll([
       AuthInterceptor(_secureStorage), // Adds access token
       RefreshTokenInterceptor(_dio, _secureStorage), // Refresh expired tokens
-      ConnectivityInterceptor(), // Queue requests offline
       ErrorHandlerInterceptor(_secureStorage), // Handle server errors
       CustomLogInterceptor(), // Log requests/responses
     ]);
