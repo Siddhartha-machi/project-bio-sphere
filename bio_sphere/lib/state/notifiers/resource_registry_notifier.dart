@@ -16,14 +16,14 @@ class ResourceRegistryNotifier {
   ResourceRegistryNotifier(this.ref);
 
   /// Register a new resource provider dynamically
-  void register<T extends IDataModel>() {
+  void _register<T extends IDataModel>() {
     if (_registry.containsKey(T)) return; // already registered
 
     final provider = ResourceProviderType<T>((ref) {
-      final catalog = ref.read(Providers.config).catalog;
+      final config = ref.read(Providers.config);
       final logger = AppLogger(tag: 'Resource<$T>:');
 
-      return ResourceNotifier<T>(catalog: catalog, logger: logger);
+      return ResourceNotifier<T>(config: config, logger: logger);
     });
 
     _registry[T] = provider;
@@ -31,10 +31,15 @@ class ResourceRegistryNotifier {
 
   /// Access an existing provider
   ResourceProviderType<T> use<T extends IDataModel>() {
+    assert(
+      T != IDataModel,
+      'Resource must be a model extended with IDataModel.',
+    );
+
     var provider = _registry[T];
 
     if (provider == null) {
-      register<T>();
+      _register<T>();
       provider = _registry[T];
     }
 

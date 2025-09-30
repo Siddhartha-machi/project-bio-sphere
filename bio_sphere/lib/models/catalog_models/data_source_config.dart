@@ -34,6 +34,7 @@ class DataSourceConfig extends IDataModel {
     return DataSourceConfig(
       id: id,
       path: path,
+      backends: backends,
       isActive: isActive,
       transformer: transformer,
     );

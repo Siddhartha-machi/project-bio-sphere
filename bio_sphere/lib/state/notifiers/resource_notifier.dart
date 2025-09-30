@@ -1,30 +1,33 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:bio_sphere/dev_utils/logging/app_logger.dart';
+import 'package:bio_sphere/state/state_defs/core_config.dart';
 import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/state/state_defs/resource_state.dart';
-import 'package:bio_sphere/data_sources/generic_data_source.dart';
-import 'package:bio_sphere/data_source_catalog/data_sources_catalog.dart';
+import 'package:bio_sphere/data_sources/generic_data_source_manager.dart';
 import 'package:bio_sphere/models/service_models/data_service/service_request.dart';
 
 typedef _BaseNotifier<T> = StateNotifier<ResourceState<T>>;
 
 /// --- Resource Notifier ---
-/// TODO 1: add auto fetch factory constructors
-/// TODO 2: mark data stale after N minutes and fetch again.
+/// TODO 1 : handle concurrent calls.
 class ResourceNotifier<T extends IDataModel> extends _BaseNotifier<T> {
   final AppLogger logger;
-  final DataSourceCatalog catalog;
+  final CoreConfig config;
 
-  ResourceNotifier({String? id, required this.catalog, required this.logger})
+  ResourceNotifier({required this.config, required this.logger})
     : super(ResourceState<T>());
 
   /// Helper to resolve a service
-  Future<GenericDataSource<T>> _tryGetService() async {
-    final service = await catalog.getService<T>();
+  Future<GenericDataSourceManager<T>> _tryGetService() async {
+    if (!await config.nConnect.isOnline()) {
+      throw Exception('No internet connection!');
+    }
+
+    final service = await config.catalog.getService<T>();
 
     if (service == null) {
-      throw Exception('Service not found.');
+      throw Exception('Service could not be loaded.');
     }
 
     return service;
@@ -33,7 +36,7 @@ class ResourceNotifier<T extends IDataModel> extends _BaseNotifier<T> {
   /// --- CRUD METHODS ---
   Future<void> fetchById(String id, {bool force = false}) async {
     /// Only fetch if no cached item
-    if (!force && state.data?.id == id) return;
+    if (!force && state.data?.id == id && !state.isStale()) return;
 
     state = state.copyWith(isLoading: true, error: null);
     try {
@@ -59,7 +62,7 @@ class ResourceNotifier<T extends IDataModel> extends _BaseNotifier<T> {
 
   Future<void> fetchList([ServiceRequest? request, bool force = false]) async {
     /// Only fetch if no cached list
-    if (!force && (state.list?.isNotEmpty ?? false)) return;
+    if (!force && (state.list?.isNotEmpty ?? false) && !state.isStale()) return;
 
     state = state.copyWith(isLoading: true, error: null);
     try {

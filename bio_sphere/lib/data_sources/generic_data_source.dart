@@ -1,92 +1,104 @@
 import 'package:bio_sphere/types/callback_typedefs.dart';
-import 'package:bio_sphere/constants/catalog_constants.dart';
 import 'package:bio_sphere/models/interfaces/i_data_model.dart';
 import 'package:bio_sphere/models/interfaces/i_data_source.dart';
 import 'package:bio_sphere/constants/api_service_constants.dart';
-import 'package:bio_sphere/data_sources/generic_api_data_source.dart';
-import 'package:bio_sphere/models/catalog_models/data_source_config.dart';
-import 'package:bio_sphere/models/service_models/data_service/service_request.dart';
+import 'package:bio_sphere/services/external/i_external_service.dart';
+import 'package:bio_sphere/services/service_utils/mappers/error_mapper.dart';
 import 'package:bio_sphere/models/service_models/data_service/service_response.dart';
+import 'package:bio_sphere/models/service_models/data_service/service_request.dart';
+import 'package:bio_sphere/models/service_models/external/backend_service_models.dart';
 
+/// Concrete Data Source that uses an external service.
 class GenericDataSource<T extends IDataModel> implements IDataSource<T> {
-  final DataSourceConfig config;
-  final List<Backend> backendOrder;
-  final List<IDataSource<T>> _dataSources = [];
+  final FromJson<T> fromJson;
+  final IExternalService<T> _service;
 
-  GenericDataSource({required this.config, required this.backendOrder}) {
-    _init();
-  }
+  const GenericDataSource(this._service, this.fromJson);
 
-  void _init() {
-    if (config.transformer == null) return;
+  ServiceResponse<R> _resolveRequest<R>(BackendResponse response) {
+    try {
+      if (response.isSuccess) {
+        R? transformedData;
 
-    for (final backend in config.backends) {
-      switch (backend) {
-        case Backend.api:
-          _dataSources.add(
-            GenericAPIDataSource<T>(
-              config.path,
-              config.transformer as FromJson<T>,
-            ),
-          );
-          break;
-        default:
-          throw Exception('Backend type not supported.');
+        if (response.rawData == null) {
+          // In case of delete, there would be no data
+          transformedData = null;
+        } else if (response.rawData is List) {
+          transformedData =
+              (response.rawData as List)
+                      .cast<Map<String, dynamic>>()
+                      .map(fromJson)
+                      .toList()
+                  as R;
+        } else {
+          transformedData = fromJson(response.rawData) as R;
+        }
+
+        // Explicitly return typed ServiceResponse<R>
+        return ServiceResponse<R>.success(
+          transformedData as R,
+
+          /// Disabled pagination
+          // pagination: PaginationMapper.mapTo(Backend.api, response),
+        );
+      } else {
+        return ServiceResponse<R>.error(ErrorMapper.mapAPIError(response));
       }
+    } catch (e) {
+      return ServiceResponse<R>.error(
+        ServiceError(
+          raw: e,
+          code: AppErrorCodes.data.codeErr,
+          message: 'Failed to transform data.',
+        ),
+      );
     }
-  }
-
-  Future<ServiceResponse<R>> _tryWithFallback<R>(
-    Future<ServiceResponse<R>> Function(IDataSource<T>) runner,
-  ) async {
-    ServiceResponse<R>? response;
-
-    for (final source in _dataSources) {
-      response = await runner(source);
-
-      /// Incorrect check, response will fail with invalid data too.
-      /// That doesn't mean service failure. Needs fix.
-      if (response.isSuccess) return response;
-    }
-
-    /// All DS failed, return the last source error
-    if (response != null) return response;
-
-    /// No data source
-    return ServiceResponse.error(
-      ServiceError(
-        code: AppErrorCodes.data.codeErr,
-        message: 'Failed to reach data services.',
-      ),
-    );
   }
 
   @override
   Future<ServiceResponse<T>> getItem(ServiceRequest request) async {
-    final id = request.filters?['id'];
+    final id = request.filters!['id'];
 
-    if (id == null) throw Exception('No id provided to fetch item');
+    final response = await _service.request(path: '/$id');
 
-    return await _tryWithFallback((service) => service.getItem(request));
+    return _resolveRequest<T>(response);
   }
 
   @override
   Future<ServiceResponse<List<T>>> getList(ServiceRequest request) async {
-    return await _tryWithFallback((service) => service.getList(request));
+    /// TODO add other filters
+    final response = await _service.request(queryParams: request.filters);
+
+    return _resolveRequest<List<T>>(response);
   }
 
   @override
   Future<ServiceResponse<T>> createItem(ServiceRequest request) async {
-    return await _tryWithFallback((service) => service.createItem(request));
+    final response = await _service.request(
+      method: HttpMethod.post,
+      data: request.item!.toJson(),
+    );
+
+    return _resolveRequest(response) as ServiceResponse<T>;
   }
 
   @override
   Future<ServiceResponse<T>> updateItem(ServiceRequest request) async {
-    return await _tryWithFallback((service) => service.updateItem(request));
+    final response = await _service.request(
+      method: HttpMethod.put,
+      data: request.item!.toJson(),
+    );
+
+    return _resolveRequest(response) as ServiceResponse<T>;
   }
 
   @override
   Future<ServiceResponse<void>> deleteItem(ServiceRequest request) async {
-    return await _tryWithFallback((service) => service.deleteItem(request));
+    final response = await _service.request(
+      method: HttpMethod.delete,
+      path: '/${request.item!.id}',
+    );
+
+    return _resolveRequest(response);
   }
 }

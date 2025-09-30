@@ -1,69 +1,66 @@
 {
   "catalog": [
     {
-      "id": "Breeds",
-      "path": "/breeds",
-      "isActive": true,
-      "backends": ["api"]
-    },
-    {
-      "id": "Facts",
-      "path": "/facts",
+      "id": "Todo",
+      "path": "/todos",
       "isActive": true,
       "backends": ["api"]
     }
   ],
-  "breeds": [
+  "todos": [
     {
-      "id": "f9643a80-af1d-422a-9f15-18d466822053",
-      "type": "breed",
-      "attributes": {
-        "name": "Caucasian Shepherd Dog",
-        "description": "The Caucasian Shepherd dog is a serious guardian breed and should never be taken lightly.",
-        "hypoallergenic": false,
-        "life": {
-          "min": 15,
-          "max": 20
-        },
-        "male_weight": {
-          "min": 50,
-          "max": 100
-        },
-        "female_weight": {
-          "min": 50,
-          "max": 100
-        }
-      }
+      "id": "1",
+      "title": "Finish API documentation",
+      "priority": 1,
+      "isCompleted": false,
+      "isRecurring": false,
+      "dueDate": null,
+      "description": "Write and review the documentation for the user authentication endpoints."
     },
     {
-      "id": "dc5e84f8-9151-4624-836c-25b4e313118b",
-      "type": "breed",
-      "attributes": {
-        "name": "Bouvier des Flandres",
-        "description": "They don't build 'em like this anymore.",
-        "hypoallergenic": false,
-        "life": {
-          "min": 10,
-          "max": 14
-        },
-        "male_weight": {
-          "min": 30,
-          "max": 40
-        },
-        "female_weight": {
-          "min": 25,
-          "max": 35
-        }
-      }
-    }
-  ],
-  "facts": [
+      "id": "2",
+      "title": "Weekly team meeting",
+      "priority": 2,
+      "isCompleted": false,
+      "isRecurring": true,
+      "dueDate": "2025-09-22T10:00:00.000Z",
+      "description": "Discuss project progress and address any blockers."
+    },
     {
-      "id": "1614a722-86cb-4315-8f60-5df99e4a40a4",
-      "type": "fact",
-      "attributes": {
-        "body": "Some studies believe that dogs started to be domesticated 33,000 years ago."
-      }
+      "id": "3",
+      "title": "Deploy new feature",
+      "priority": 3,
+      "isCompleted": true,
+      "isRecurring": false,
+      "dueDate": "2025-09-18T16:30:00.000Z",
+      "description": "Deploy the new user profile page to production."
+    },
+    {
+      "id": "4",
+      "title": "Prepare presentation",
+      "priority": 1,
+      "isCompleted": false,
+      "isRecurring": false,
+      "dueDate": "2025-09-25T09:00:00.000Z",
+      "description": null
+    },
+    {
+      "id": "5",
+      "title": "Research machine learning models",
+      "priority": 4,
+      "isCompleted": false,
+      "isRecurring": false,
+      "dueDate": null,
+      "description": "Explore different models for natural language processing."
+    },
+    {
+      "id": "10",
+      "title": "Finish API documentation",
+      "priority": 1,
+      "isCompleted": false,
+      "isRecurring": false,
+      "dueDate": null,
+      "description": "Write and review the documentation for the user authentication endpoints."
     }
   ]
 }
