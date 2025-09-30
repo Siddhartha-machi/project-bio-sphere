@@ -20,10 +20,10 @@ class ResourceRegistryNotifier {
     if (_registry.containsKey(T)) return; // already registered
 
     final provider = ResourceProviderType<T>((ref) {
-      final catalog = ref.read(Providers.config).catalog;
+      final config = ref.read(Providers.config);
       final logger = AppLogger(tag: 'Resource<$T>:');
 
-      return ResourceNotifier<T>(catalog: catalog, logger: logger);
+      return ResourceNotifier<T>(config: config, logger: logger);
     });
 
     _registry[T] = provider;
